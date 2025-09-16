@@ -1,10 +1,16 @@
-import React from 'react'
+import Footer from "./components/footer"
+import Header from "./components/header"
+import Hero from "./components/hero"
 
-const App = () => {
+function App() {
+  
   return (
-    <div>
-      First branch 
-    </div>
+    <>
+     <Header />
+     <Hero/>
+     <Footer/>
+    </>      
+
   )
 }
 
