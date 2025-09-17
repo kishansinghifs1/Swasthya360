@@ -1,9 +1,12 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserCircle, Menu } from "lucide-react";
 import EmergencyButton from "./EmergencyButton";
+import SignIn from "./signIn";
+import SignUp from "./signup";
 
 const Header = ({ onMenuClick }) => {
+  const navigate = useNavigate();
   return (
     <header className="relative shadow-md border-b-5 border-[#008080]">
       {/* 🎨 Background blobs */}
@@ -37,14 +40,21 @@ const Header = ({ onMenuClick }) => {
         <div className="flex items-center space-x-4">
           <EmergencyButton />
 
+          <Link to="/signin">
+            {" "}
+            <button
+              className="px-4 py-3 bg-[#008080] text-white rounded-lg hover:bg-[#00CED1] transition font-semibold"
+              onClick={() => navigate("/signin")}
+            >
+              SignIn
+            </button>
+          </Link>
 
-          <button className="px-4 py-3 bg-[#008080] text-white rounded-lg hover:bg-[#00CED1] transition font-semibold">
-            Sign In
-          </button>
-
-          <button className="px-4 py-3 bg-gradient-to-r from-[#7CFC00] to-[#228B22] text-white rounded-lg hover:opacity-90 transition font-semibold shadow-md">
-            Sign Up
-          </button>
+          <Link to="/signup">
+            <button className="px-4 py-3 bg-gradient-to-r from-[#7CFC00] to-[#228B22] text-white rounded-lg hover:opacity-90 transition font-semibold shadow-md">
+              SignUp
+            </button>
+          </Link>
           <Link to="/profile">
             <UserCircle className="h-13 w-16 md:h-10 md:w-15 text-[#008080] hover:text-[#00CED1] transition" />
           </Link>
