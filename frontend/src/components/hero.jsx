@@ -1,41 +1,67 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+const agents = [
+  { name: "Check Symptoms", route: "/check-symptoms" },
+  { name: "Vaccination Info", route: "/vaccination-info" },
+  { name: "Emergency Help", route: "/emergency-help" },
+  { name: "Disease Outbreaks", route: "/disease-outbreaks" },
+  { name: "Language Help", route: "/language-help" },
+  { name: "Health Records", route: "/health-records" },
+];
+
+// Mid-tone colors for cards (contrast against background)
+const headerColors = [
+  "bg-teal-500",
+  "bg-sky-500",
+  "bg-lime-500",
+  "bg-green-600",
+  "bg-orange-500",
+  "bg-yellow-500",
+];
 
 const Hero = () => {
   return (
-    <section className="relative bg-gradient-to-r from-blue-50 via-white to-blue-100 py-16 md:py-24">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between">
-        
-        {/* Left Content */}
-        <div className="md:w-1/2 space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-            AI-Driven Public Health Chatbot <br />
-            <span className="text-blue-600">for Disease Awareness</span>
-          </h1>
+    <section className="relative bg-gradient-to-b from-blue-200 via-blue-150 to-blue-100 shadow-md overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-teal-800 opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-800 opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-10 left-1/3 w-72 h-72 bg-green-800 opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-10 right-10 w-80 h-80 bg-orange-800 opacity-20 rounded-full blur-3xl"></div>
+      </div>
 
-          <p className="text-lg text-gray-700 leading-relaxed">
-            A multilingual AI chatbot that empowers rural and semi-urban
-            populations with preventive healthcare knowledge, disease symptom
-            awareness, and vaccination schedules — available anytime via
-            WhatsApp or SMS.
-          </p>
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 md:py-24 flex flex-col space-y-8">
+        {/* Hero Heading */}
+        <h1 className="text-4xl md:text-6xl font-serif font-extrabold text-blue-900 text-center md:text-left">
+          Welcome to Swasthya360
+        </h1>
 
-          <div className="flex flex-wrap gap-4">
-            <button className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition">
-              🚀 Start Chatting
-            </button>
-            <button className="px-6 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition">
-              Learn More
-            </button>
-          </div>
-        </div>
+        {/* Subheading */}
+        <p className="text-lg md:text-xl text-black max-w-3xl text-center md:text-left">
+          Health guidance you can trust – simple, clear, and in your language.  
+          Check symptoms, get vaccination info, or find emergency help anytime!
+        </p>
 
-        {/* Right Content / Illustration */}
-        <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center">
-          <img
-            src="/health-chatbot.png" // Place an image in public folder
-            alt="AI Health Chatbot"
-            className="w-full max-w-md rounded-xl shadow-lg"
-          />
+        {/* Agent Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+          {agents.map((agent, idx) => (
+            <Link
+              key={idx}
+              to={agent.route}
+              className={`flex flex-col justify-center items-center p-6 rounded-xl shadow-md border-2 border-blue-900 ${headerColors[idx % headerColors.length]} hover:scale-105 transform transition cursor-pointer`}
+            >
+              <img
+                src="/health-chatbot.png"
+                alt={agent.name}
+                className="w-16 h-16 mb-4"
+              />
+              {/* Updated span for proper wrapping */}
+              <span className="font-semibold text-white text-center break-words">
+                {agent.name}
+              </span>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
