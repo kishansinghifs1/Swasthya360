@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id            Int             @id @default(autoincrement())
+  name          String
+  age           Int
+  gender        String
+  location      String?
+  districtCode  String?
+  languagePref  String?
+  createdAt     DateTime        @default(now())
+
+  auth          PatientAuth?
+  details       PatientDetails?
+  vaccinations  Vaccination[]
+  family        Family[]
+  chats         ChatHistory[]
+}
+
+model PatientAuth {
+  id         Int      @id @default(autoincrement())
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId  Int      @unique  
+  email      String?  @unique
+  phone      String?  @unique
+  password   String
+  lastLogin  DateTime?
+}
+
+model PatientDetails {
+  id          Int     @id @default(autoincrement())
+  patient     Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   Int     @unique 
+  conditions  String?
+  allergies   String?
+  medications String?
+  notes       String?
+}
+
+model Vaccination {
+  id          Int     @id @default(autoincrement())
+  patient     Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   Int
+  vaccineName String
+  dueDate     DateTime?
+  status      String
+}
+
+model Family {
+  id        Int     @id @default(autoincrement())
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId Int
+  childName String
+  childAge  Int
+  gender    String?
+  notes     String?
+}
+
+model ChatHistory {
+  id          Int     @id @default(autoincrement())
+  patient     Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  patientId   Int
+  userMessage String
+  aiResponse  String
+  timestamp   DateTime @default(now())
+}
