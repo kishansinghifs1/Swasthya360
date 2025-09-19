@@ -211,7 +211,6 @@ def swasthya360(prompt: str) -> str:
         # print(e)
         return f"I'm having technical difficulties, but I want you to know your feelings matter. Please try again shortly."
 
-
 # ===================================
 # Step 2: Emergency Call via Twilio
 # ===================================

@@ -32,11 +32,21 @@ const Header = () => {
 
         {/* Menu */}
         <nav className="hidden md:flex space-x-6 text-base font-medium">
-          <a href="#home" className="hover:text-[#008080]">Home</a>
-          <a href="#features" className="hover:text-[#008080]">Features</a>
-          <a href="#services" className="hover:text-[#008080]">Services</a>
-          <a href="#aboutus" className="hover:text-[#008080]">About Us</a>
-          <a href="#contactus" className="hover:text-[#008080]">Contact</a>
+          <a href="#home" className="hover:text-[#008080]">
+            Home
+          </a>
+          <a href="#features" className="hover:text-[#008080]">
+            Features
+          </a>
+          <a href="#services" className="hover:text-[#008080]">
+            Services
+          </a>
+          <a href="#aboutus" className="hover:text-[#008080]">
+            About Us
+          </a>
+          <a href="#contactus" className="hover:text-[#008080]">
+            Contact
+          </a>
         </nav>
 
         {/* Right side: Emergency + Auth */}

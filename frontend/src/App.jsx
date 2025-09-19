@@ -9,6 +9,7 @@ import SignUp from "./components/SignUp";
 import Landingpage from "./components/Landingpage";
 import Symptoms from "./components/Symptoms";
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
+import VaccinationPage from "./Vaccination-info/VaccinationPage";
 
 function App() {
   return (

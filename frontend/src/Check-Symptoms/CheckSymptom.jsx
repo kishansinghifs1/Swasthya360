@@ -2,18 +2,13 @@ import SymptomContainer from "./SymptomContainer";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import Chatbot from "./Chatbot";
+import SubHeader from "../components/SubHeader";
+import Header from "../components/Header";
 
 const CheckSymptom = () => {
   return (
-    <div className="w-full  p-2">
-      <h1 className="shadow-[0_0_10px_rgba(0,0,0,0.3)] p-2 rounded-lg flex items-center gap-2 text-2xl m-2 font-bold text-black">
-        {" "}
-        <Link to="/">
-          {" "}
-          <ArrowLeft />
-        </Link>
-        <span>Symptom Checker</span>
-      </h1>
+    <div className="w-full ">
+      <SubHeader heading={"Symptom Checker"} />
       <div className="relative flex justify-center gap-10">
         <SymptomContainer />
         <Chatbot />
