@@ -9,9 +9,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "cross-fetch": "^4.1.0",
-    "hono": "^4.9.7",
-    "prisma": "^6.16.2",
-    "twilio": "^5.9.0"
+    "hono": "^4.9.7"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250917.0",
