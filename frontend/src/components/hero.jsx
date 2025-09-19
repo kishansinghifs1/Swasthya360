@@ -11,36 +11,12 @@ import {
 } from "lucide-react";
 
 const agents = [
-  {
-    name: "Check Symptoms",
-    route: "/check-symptoms",
-    icon: <ShieldCheck size={40} />,
-  },
-  {
-    name: "Vaccination Info",
-    route: "/vaccination-info",
-    icon: <Syringe size={40} />,
-  },
-  {
-    name: "Emergency Help",
-    route: "/emergency-help",
-    icon: <PhoneCall size={40} />,
-  },
-  {
-    name: "Disease Outbreaks",
-    route: "/disease-outbreaks",
-    icon: <AlertTriangle size={40} />,
-  },
-  {
-    name: "Language Help",
-    route: "/language-help",
-    icon: <Languages size={40} />,
-  },
-  {
-    name: "Health Records",
-    route: "/health-records",
-    icon: <FileText size={40} />,
-  },
+  { name: "Check Symptoms", route: "/check-symptoms", icon: <ShieldCheck size={40} /> },
+  { name: "Vaccination Info", route: "/vaccination-info", icon: <Syringe size={40} /> },
+  { name: "Emergency Help", route: "/emergency-help", icon: <PhoneCall size={40} /> },
+  { name: "Disease Outbreaks", route: "/disease-outbreaks", icon: <AlertTriangle size={40} /> },
+  { name: "Language Help", route: "/language-help", icon: <Languages size={40} /> },
+  { name: "Health Records", route: "/health-records", icon: <FileText size={40} /> },
 ];
 
 const Hero = () => {
@@ -70,7 +46,7 @@ const Hero = () => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-lg md:text-xl text-[#001F3F] mx-auto text-center max-w-3xl opacity-90"
         >
-          Health guidance you can trust – simple, clear, and in your language.
+          Health guidance you can trust – simple, clear, and in your language. 
           Check symptoms, get vaccination info, or find emergency help anytime!
         </motion.p>
 

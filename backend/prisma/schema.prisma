@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -50,4 +49,3 @@ model MedicalRecord {
 
   user      User     @relation(fields: [userId], references: [id])
 }
-
