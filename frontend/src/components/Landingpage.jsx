@@ -1,5 +1,5 @@
 import Hero from "./hero";
-import Header from "./header";
+import Header from "./Header";
 import Dashboard from "./dashboard";
 import { useState } from "react";
 

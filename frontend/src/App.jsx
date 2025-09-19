@@ -4,6 +4,7 @@ import SignUp from "./components/signup";
 import Landingpage from "./components/Landingpage";
 import Symptoms from "./components/Symptoms";
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
+import VaccinationPage from "./Vaccination-info/VaccinationPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/check-symptoms" element={<CheckSymptom />} />
+          <Route path="/vaccination-info" element={<VaccinationPage />} />
         </Routes>
       </Router>
     </>

@@ -45,24 +45,30 @@ const agents = [
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden ">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16 md:py-24 flex flex-col space-y-8">
+    <section className="relative bg-gradient-to-r from-orange-50 via-pink-50 to-white py-16 md:py-24 overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute -top-20 -left-20 w-96 h-96 bg-pink-300 opacity-20 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 right-0 w-[28rem] h-[28rem] bg-orange-300 opacity-25 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-1/2 w-80 h-80 bg-pink-400 opacity-15 rounded-full blur-3xl"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col space-y-8">
         {/* Hero Heading */}
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-3xl md:text-5xl font-extrabold text-orange-500 text-center"
+          className="text-3xl md:text-5xl font-extrabold text-[#001F3F] text-center"
         >
           Welcome to Swasthya360
         </motion.h1>
 
-        {/* Subheading */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="text-lg md:text-xl text-black mx-auto text-center max-w-3xl"
+          className="text-lg md:text-xl text-[#001F3F] mx-auto text-center max-w-3xl opacity-90"
         >
           Health guidance you can trust – simple, clear, and in your language.
           Check symptoms, get vaccination info, or find emergency help anytime!
@@ -79,10 +85,10 @@ const Hero = () => {
             >
               <Link
                 to={agent.route}
-                className={`flex flex-col justify-center items-center p-8 rounded-2xl shadow-lg bg-orange-200 text-black border-2 border-orange-500 hover:scale-105 hover:shadow-2xl transform transition`}
+                className="flex flex-col justify-center items-center p-8 rounded-3xl shadow-xl bg-gradient-to-br from-orange-200 via-pink-100 to-white border border-orange-300 hover:scale-105 hover:shadow-2xl transform transition"
               >
                 <div className="mb-4">{agent.icon}</div>
-                <span className="font-semibold text-lg text-center">
+                <span className="font-semibold text-lg text-center text-[#001F3F]">
                   {agent.name}
                 </span>
               </Link>
