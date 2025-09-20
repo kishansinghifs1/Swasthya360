@@ -23,7 +23,7 @@ const Footer = () => {
           <a href="#terms" className="hover:text-[#00CED1] transition">Terms of Service</a>
           <div id="contactus" className="mt-2">
             📞 Contact:{" "}
-            <a href="tel:9511963749" className="hover:text-[#00CED1]">9511963749</a>
+            <a href="tel:9511963749" className="hover:text-[#00CED1]">+1234567890</a>
           </div>
         </div>
 
