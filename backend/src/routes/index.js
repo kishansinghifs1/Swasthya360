@@ -1,4 +1,4 @@
-import { createUserController } from "../controllers/user.controller.js";
+import { createUserController,loginUserController } from "../controllers/user.controller.js";
 
 
 import express from "express";
@@ -7,6 +7,14 @@ router.post("/createuser", async (req, res) => {
     try {
         const user = await createUserController(req,res);
         res.status(201).json(user);
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+router.post("/login", async (req, res) => {
+    try {
+        const user = await loginUserController(req,res);
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
     }
