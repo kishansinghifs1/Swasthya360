@@ -7,9 +7,10 @@ import FeaturesSection from "./components/FeatureSection";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Landingpage from "./components/Landingpage";
-import Symptoms from "./components/Symptoms";
+
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
+import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
 
 function App() {
   return (
@@ -34,8 +35,10 @@ function App() {
 
       {/* After login routes */}
       <Route path="/landing" element={<Landingpage />} />
-      <Route path="/symptoms" element={<Symptoms />} />
+
       <Route path="/check-symptoms" element={<CheckSymptom />} />
+      <Route path="/vaccination-info" element={<VaccinationPage />} />
+      <Route path="/disease-outbreaks" element={<OutBreakPage />} />
 
       {/* Example profile page */}
       <Route
