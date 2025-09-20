@@ -27,15 +27,21 @@ model User {
 
   // Relations
   chatHistories      ChatHistory[]
+  medicalConditions MedicalCondition[]
   vaccinationReports VaccinationReport[]
 }
 model allergies{
   id    String @id @default(cuid())
-  name  String
+  name  String?
   userId String
   user   User @relation(fields: [userId], references: [id])
 }
-
+model MedicalCondition{
+  id    String @id @default(cuid())
+  name  String?
+  userId String
+  user   User @relation(fields: [userId], references: [id]) 
+}
 model ChatHistory {
   id        String   @id @default(cuid())
   message   String
