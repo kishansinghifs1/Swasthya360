@@ -1,7 +1,8 @@
 // controllers/user.controller.js
 import { prisma } from "../config/prisma.config.js";
 import { hashPassword } from "../services/hashpassword.js";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
+import { comparePassword } from "../services/hashpassword.js";
 import jwt from "jsonwebtoken";
 // ✅ Create User Controller
 export const createUserController = async (req, res) => {
@@ -110,8 +111,8 @@ export const loginUserController = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    // 2. Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
+   
+    const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
@@ -123,12 +124,12 @@ export const loginUserController = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    // 4. Send token in HTTP-only cookie
+   
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true for https
+      secure: process.env.NODE_ENV === "production", 
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
     return res.status(200).json({
