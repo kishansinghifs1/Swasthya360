@@ -1,18 +1,8 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header.jsx";
 import Footer from "./footer.jsx";
 
-import PersonalInfo from "./PersonalInfo.jsx";
-import ContactInfo from "./ContactInfo.jsx";
-import MedicalInfo from "./MedicalInfo.jsx";
-
 const SignUp = () => {
-  const [step, setStep] = useState(1);
-
-  const nextStep = () => step < 3 && setStep(step + 1);
-  const prevStep = () => step > 1 && setStep(step - 1);
-
   return (
     <>
       {/* Hero Section in background */}
@@ -49,6 +39,52 @@ const SignUp = () => {
               </div>
             </div>
 
+<<<<<<< HEAD
+            <div className="relative flex flex-col justify-center items-center gap-6 w-full max-w-md p-8 rounded-2xl shadow-xl bg-white/90 backdrop-blur-md border border-gray-200">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/Swasthya360.png"
+                  alt="Swasthya360 Logo"
+                  className="h-16 w-16 object-cover rounded-full border-4 border-cyan-400 shadow-lg"
+                />
+                <div className="text-center space-y-1">
+                  <h1 className="text-green-800 text-3xl font-bold">
+                    Create Account
+                  </h1>
+                  <h2 className="text-gray-600 text-base">
+                    Fill the details to sign up
+                  </h2>
+                </div>
+              </div>
+
+              <form className="flex flex-col gap-4 justify-center items-center">
+                <label>
+                  Full name:
+                  <input
+                    type="text"
+                    placeholder="Enter your Full name"
+                    className="border-1 border-gray-400 p-2 rounded-lg"
+                  />
+                </label>
+
+                <label>
+                  Email
+                  <input
+                    type="email"
+                    placeholder="Enter your  Email"
+                    className="border-1 border-gray-400 p-2 rounded-lg"
+                  />
+                </label>
+                <label>
+                  Password
+                  <input
+                    type="password"
+                    placeholder="Enter your Password"
+                    className="border-1 border-gray-400 p-2 rounded-lg"
+                  />
+                </label>
+              </form>
+=======
             <h1 className="text-green-800 text-xl font-bold mb-3">
               Health Profile Setup
             </h1>
@@ -109,6 +145,7 @@ const SignUp = () => {
                 </button>
               )}
             </div>
+>>>>>>> upstream/main
 
             {/* Already have account */}
             <div className="flex justify-center items-center gap-2 text-sm">
