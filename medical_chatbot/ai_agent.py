@@ -89,11 +89,11 @@ def parse_response(stream):
 #  .For testing purpose only
 # --------------------------------------------
 
-# if __name__ == "__main__":
-#     user_input = input("You:")  # get user input
-#     # Use the agent to process input
-#     stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
+if __name__ == "__main__":
+    user_input = input("You:")  # get user input
+    # Use the agent to process input
+    stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
 
-#     tool_name, response = parse_response(stream)
-#     print("Tool called:", tool_name)
-#     print("AI Response:", response)
+    tool_name, response = parse_response(stream)
+    print("Tool called:", tool_name)
+    print("AI Response:", response)

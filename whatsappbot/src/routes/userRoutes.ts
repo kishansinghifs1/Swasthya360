@@ -2,6 +2,8 @@ import { Hono } from "hono";
 
 import { getGeminiResponse } from "../functions/geminifunction";
 import { sendWhatsAppMessage, sendWhatsAppTemplate } from "../functions/whatsappmessages";
+import { containsEmergencyKeywords } from "../emergency/emergency";
+import { callEmergency } from "../emergency/emergency"; 
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -9,13 +11,13 @@ export const userRouter = new Hono<{
     LONG_ACCESS_TOKEN: string;
     Your_PHONE_NUMBER_ID: string;
     Phone_Number: string;
+    TWILIO_ACCOUNT_SID: string;
+    TWILIO_AUTH_TOKEN: string;
+    TWILIO_FROM_NUMBER: string;
+    EMERGENCY_CONTACT: string;
   };
 }>();
-
-//check server is running
 userRouter.get("/ping", (c) => c.json({ message: "pong" }));
-
-//webhook verification
 userRouter.get("/", (c) => {
   const mode = c.req.query("hub.mode");
   const token = c.req.query("hub.verify_token");
@@ -31,7 +33,6 @@ userRouter.get("/", (c) => {
   return c.text("Forbidden", 403);
 });
 
-//check the template is working or not 
 userRouter.post('/send-template', async (c) => {
   const url = `https://graph.facebook.com/v23.0/${c.env.Your_PHONE_NUMBER_ID}/messages`
    
@@ -56,12 +57,9 @@ userRouter.post('/send-template', async (c) => {
      
   return c.json(await response.json() as any) 
 })
-
-//webhook to receive messages and respond
 userRouter.post("/", async (c) => {
   try {
     const body = await c.req.json();
-    console.log('Incoming webhook:', JSON.stringify(body, null, 2));
 
     if (body.object === 'whatsapp_business_account') {
       if (body.entry &&
@@ -75,11 +73,29 @@ userRouter.post("/", async (c) => {
         const message = body.entry[0].changes[0].value.messages[0];
         const from = message.from;
         const messageText = message.text?.body || '';
+        if (containsEmergencyKeywords(messageText)) {
+          try {
+            const callResult = await callEmergency(
+              c.env.TWILIO_ACCOUNT_SID,
+              c.env.TWILIO_AUTH_TOKEN,
+              c.env.TWILIO_FROM_NUMBER,
+              c.env.EMERGENCY_CONTACT
+            );
+            return c.json({
+              status: 'success',
+              message: callResult,
+              userMessage: messageText
+            });
 
-        console.log('Message received from:', from);
-        console.log('Message text:', messageText);
-
-        // Check if this is a specific trigger for template (optional)
+          } catch (error) {
+            console.error('Emergency call failed:', error);
+            return c.json({
+              status: 'error',
+              message: 'Failed to make emergency call',
+              error: error instanceof Error ? error.message : 'Unknown error'
+            }, 500);
+          }
+        }
         if (messageText.toLowerCase().includes('template') || messageText.toLowerCase().includes('hello')) {
           await sendWhatsAppTemplate(from);
           
@@ -88,12 +104,8 @@ userRouter.post("/", async (c) => {
             message: 'Template sent'
           });
         } else {
-          // Send user's message to Gemini and get response
           const geminiResponse = await getGeminiResponse(messageText);
-
-          // Send Gemini's response back to WhatsApp user
           await sendWhatsAppMessage(from, geminiResponse);
-
           return c.json({
             status: 'success',
             message: 'Gemini response sent',
@@ -111,6 +123,29 @@ userRouter.post("/", async (c) => {
     return c.json({ 
       status: 'error', 
       message: 'Failed to process webhook',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, 500);
+  }
+});
+
+
+userRouter.post('/test-emergency-call', async (c) => {
+  try {
+    const result = await callEmergency(
+      c.env.TWILIO_ACCOUNT_SID,
+      c.env.TWILIO_AUTH_TOKEN,
+      c.env.TWILIO_FROM_NUMBER,
+      c.env.EMERGENCY_CONTACT
+    );
+    
+    return c.json({
+      success: true,
+      message: 'Emergency call test completed',
+      result: result
+    });
+  } catch (error) {
+    return c.json({
+      success: false,
       error: error instanceof Error ? error.message : 'Unknown error'
     }, 500);
   }

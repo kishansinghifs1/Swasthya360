@@ -1,53 +1,75 @@
-import { prisma } from "../config/prisma.config.js";
+import { PrismaClient } from "@prisma/client";
 
-// ✅ Add Vaccination Report
-export const addVaccinationReportController = async (req, res) => {
+const prisma = new PrismaClient();
+
+// ================= CREATE Vaccination Report =================
+export const createVaccinationReport = async (req, res) => {
   try {
-    const { userId, vaccineName, dateAdministered, notes } = req.body;
+    const { vaccineName, description, type, dateAdministered } = req.body;
 
-    if (!userId || !vaccineName || !dateAdministered) {
-      return res.status(400).json({ error: "userId, vaccineName and dateAdministered are required" });
+    if (!vaccineName) {
+      return res.status(400).json({ message: "vaccineName is required." });
     }
 
-    // Check if user exists
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Add vaccination report
     const report = await prisma.vaccinationReport.create({
       data: {
         vaccineName,
-        dateAdministered: new Date(dateAdministered),
-        notes,
-        userId,
+        description,
+        type,
+        dateAdministered: dateAdministered ? new Date(dateAdministered) : null,
+        userId: req.userId,
       },
     });
 
-    return res.status(201).json({
-      message: "Vaccination report added successfully",
-      report,
-    });
+    res.status(201).json({ report });
   } catch (error) {
-    console.error("Error adding vaccination report:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error("CreateVaccinationReport Error:", error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
 
-// ✅ Get all vaccination reports for a user
-export const getVaccinationReportsController = async (req, res) => {
+// ================= UPDATE Vaccination Report =================
+export const updateVaccinationReport = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { id } = req.params;
+    const { vaccineName, description, type, dateAdministered } = req.body;
 
-    const reports = await prisma.vaccinationReport.findMany({
-      where: { userId },
-      orderBy: { dateAdministered: "desc" }, // latest first
+    const existingReport = await prisma.vaccinationReport.findUnique({ where: { id } });
+    if (!existingReport) {
+      return res.status(404).json({ message: "Vaccination report not found." });
+    }
+    if (existingReport.userId !== req.userId) {
+      return res.status(403).json({ message: "Forbidden: You cannot update this report." });
+    }
+
+    const updateData = {};
+    if (vaccineName) updateData.vaccineName = vaccineName;
+    if (description) updateData.description = description;
+    if (type) updateData.type = type;
+    if (dateAdministered) updateData.dateAdministered = new Date(dateAdministered);
+
+    const updatedReport = await prisma.vaccinationReport.update({
+      where: { id },
+      data: updateData,
     });
 
-    return res.status(200).json({ reports });
+    res.status(200).json({ report: updatedReport });
   } catch (error) {
-    console.error("Error fetching vaccination reports:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error("UpdateVaccinationReport Error:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+// ================= GET all Vaccination Reports of logged-in user =================
+export const getVaccinationReports = async (req, res) => {
+  try {
+    const reports = await prisma.vaccinationReport.findMany({
+      where: { userId: req.userId },
+      orderBy: { dateAdministered: "desc" },
+    });
+    res.status(200).json({ reports });
+  } catch (error) {
+    console.error("GetVaccinationReports Error:", error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
