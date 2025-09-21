@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Hero from "./hero";
-import Header from "./Header";
+import Header from "./header";
 import Dashboard from "./dashboard";
 import Footer from "./footer";
 import AboutSwasthya from "./AboutSwasthya";
