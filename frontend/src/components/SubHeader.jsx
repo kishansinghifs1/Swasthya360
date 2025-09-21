@@ -5,7 +5,7 @@ const SubHeader = ({ heading }) => {
     <div className="flex justify-between bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)] p-2 rounded-lg m-4">
       <h1 className=" flex items-center gap-2 text-2xl m-2 font-bold text-black">
         {" "}
-        <Link to="/">
+        <Link to="/landing">
           {" "}
           <ArrowLeft />
         </Link>
