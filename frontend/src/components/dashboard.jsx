@@ -1,16 +1,15 @@
 import React from "react";
-import { X, Home, Info, Phone, HeartPulse, Salad, Brain, Dumbbell, Briefcase } from "lucide-react";
+import { X, Home, Info, Phone,User,LogOut, Briefcase,HelpCircle } from "lucide-react";
 
 const Dashboard = ({ isOpen, onClose }) => {
   const menuItems = [
-    { name: "Home", icon: <Home className="w-5 h-5" /> },
-    { name: "About Us", icon: <Info className="w-5 h-5" /> },
-    { name: "Services", icon: <Briefcase className="w-5 h-5" /> },
-    { name: "Contact Us", icon: <Phone className="w-5 h-5" /> },
-    { name: "Healthy Living", icon: <HeartPulse className="w-5 h-5" /> },
-    { name: "Nutrition", icon: <Salad className="w-5 h-5" /> },
-    { name: "Mental Health", icon: <Brain className="w-5 h-5" /> },
-    { name: "Fitness", icon: <Dumbbell className="w-5 h-5" /> },
+     { name: "Your Profile >", icon: <User className="w-5 h-5" /> },
+    { name: "Home >", icon: <Home className="w-5 h-5" /> },
+    { name: "About Us >", icon: <Info className="w-5 h-5" /> },
+    { name: "Services >", icon: <Briefcase className="w-5 h-5" /> },
+    { name: "Contact Us >", icon: <Phone className="w-5 h-5" /> },
+    { name: "Log out >", icon: <LogOut className="w-5 h-5" /> },
+    { name: "Help >", icon: <HelpCircle className="w-5 h-5" /> },
   ];
 
   return (

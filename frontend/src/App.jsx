@@ -10,7 +10,11 @@ import Landingpage from "./components/Landingpage";
 
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
+<<<<<<< HEAD
 import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
+=======
+import UserDetails from "./User-Details/UserDetails";
+>>>>>>> upstream/main
 
 function App() {
   return (
@@ -37,8 +41,12 @@ function App() {
       <Route path="/landing" element={<Landingpage />} />
 
       <Route path="/check-symptoms" element={<CheckSymptom />} />
+<<<<<<< HEAD
       <Route path="/vaccination-info" element={<VaccinationPage />} />
       <Route path="/disease-outbreaks" element={<OutBreakPage />} />
+=======
+      <Route path="/user-details" element={<UserDetails/>} />
+>>>>>>> upstream/main
 
       {/* Example profile page */}
       <Route

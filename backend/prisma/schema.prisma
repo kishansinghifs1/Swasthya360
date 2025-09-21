@@ -1,51 +1,70 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+datasource db {
+  provider = "postgresql" // or "mysql" or "sqlite"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String    @unique
-  password      String
-  phone         String?   
-  dateOfBirth   DateTime?
-  gender        String?   
-  // role    
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                 String          @id @default(cuid())
+  email              String?       @unique
+  name               String?
+  password           String?
+  age                Int?
+  phone             BigInt?
+  
+  gender             String?
+  location           String?
+  emergencyContact   String?
+  preferredLanguage  String  @default("English")
+  medicalCondition   String
+  allergies          allergies[]
+  currentMedication  String
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 
   // Relations
-  appointments  Appointment[]
-
-  MedicalRecord MedicalRecord[]
+  chatHistories      ChatHistory[]
+  medicalConditions MedicalCondition[]
+  vaccinationReports VaccinationReport[]
 }
-model Appointment {
-  id        Int      @id @default(autoincrement())
-  date      DateTime
-  reason    String?
-  status    String   @default("scheduled") 
-  userId    Int
-  doctorId  Int
+model allergies{
+  id    String @id @default(cuid())
+  name  String?
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+}
+model MedicalCondition{
+  id    String @id @default(cuid())
+  name  String?
+  userId String
+  user   User @relation(fields: [userId], references: [id]) 
+}
+model ChatHistory {
+  id        String   @id @default(cuid())
+  message   String
+  sender    Sender
+  timestamp DateTime @default(now())
 
+  // Relations
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
 }
-model MedicalRecord {
-  id        Int      @id @default(autoincrement())
-  details   String
-  createdAt DateTime @default(now())
-  userId    Int
 
-  user      User     @relation(fields: [userId], references: [id])
+model VaccinationReport {
+  id              String   @id @default(cuid())
+  vaccineName     String
+  dateAdministered DateTime
+  notes           String?
+
+  
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+enum Sender {
+  USER
+  AGENT
 }
