@@ -11,6 +11,7 @@ import Symptoms from "./components/Symptoms";
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
 import UserDetails from "./User-Details/UserDetails";
+import ChatbotParent from "./Health-Chatbot/ChatbotParent";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
       <Route path="/symptoms" element={<Symptoms />} />
       <Route path="/check-symptoms" element={<CheckSymptom />} />
       <Route path="/user-details" element={<UserDetails/>} />
+      <Route path="/health-chatbot" element={<ChatbotParent/>} />
 
       {/* Example profile page */}
       <Route
