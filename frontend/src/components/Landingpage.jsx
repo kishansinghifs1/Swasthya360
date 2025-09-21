@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Hero from "./hero";
-import Header from "./header";
+import Header from "./Header";
 import Dashboard from "./dashboard";
-import Footer from "./footer";
+import Footer from "./Footer";
 import AboutSwasthya from "./AboutSwasthya";
 
 const Landingpage = () => {
