@@ -12,6 +12,7 @@ import CheckSymptom from "./Check-Symptoms/CheckSymptom";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
 import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
 import UserDetails from "./User-Details/UserDetails";
+import ChatbotParent from "./Health-Chatbot/ChatbotParent";
 
 function App() {
   return (
