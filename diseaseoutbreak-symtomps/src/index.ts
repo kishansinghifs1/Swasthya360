@@ -9,7 +9,11 @@ const app = new Hono<{
   };
 }>();
 
-app.use("*", cors());
+app.use("*", cors({
+  origin: "http://localhost:5173",
+  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowHeaders: ["Content-Type", "Authorization"],    
+}));
 
 
 app.route("/api/v1/swasthya360", newsRouter);

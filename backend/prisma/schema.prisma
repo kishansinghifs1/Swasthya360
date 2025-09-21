@@ -8,61 +8,52 @@ generator client {
 }
 
 model User {
-  id                 String          @id @default(cuid())
-  email              String?       @unique
-  name               String?
-  password           String?
+  id                 String              @id @default(cuid())
+  email              String             @unique
+  name               String
+  password           String
   age                Int?
-  phone             BigInt?
-  
+  phone              BigInt?
   gender             String?
   location           String?
   emergencyContact   String?
-  preferredLanguage  String  @default("English")
-  medicalCondition   String
-  allergies          allergies[]
-  currentMedication  String
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
-
-  // Relations
+  preferredLanguage  String?             @default("English")
+  medicalCondition   String?
+  allergies          String?        // optional array
+  currentMedication  String?
+  medicalConditions  String?         // optional array
+  createdAt          DateTime?           @default(now())
+  updatedAt          DateTime?           @updatedAt
   chatHistories      ChatHistory[]
-  medicalConditions MedicalCondition[]
   vaccinationReports VaccinationReport[]
 }
-model allergies{
-  id    String @id @default(cuid())
-  name  String?
-  userId String
-  user   User @relation(fields: [userId], references: [id])
-}
-model MedicalCondition{
-  id    String @id @default(cuid())
-  name  String?
-  userId String
-  user   User @relation(fields: [userId], references: [id]) 
-}
+
 model ChatHistory {
   id        String   @id @default(cuid())
   message   String
   sender    Sender
   timestamp DateTime @default(now())
-
-  // Relations
   userId    String
   user      User     @relation(fields: [userId], references: [id])
 }
 
 model VaccinationReport {
-  id              String   @id @default(cuid())
-  vaccineName     String
-  dateAdministered DateTime
-  notes           String?
-
-  
-  userId          String
-  user            User     @relation(fields: [userId], references: [id])
+  id               String      @id @default(cuid())
+  vaccineName      String
+  description      String?     
+  type             VaccineType?
+  dateAdministered DateTime?
+  userId           String
+  user             User        @relation(fields: [userId], references: [id])
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 }
+
+enum VaccineType {
+  Compulsory
+  Optional
+}
+
 
 enum Sender {
   USER

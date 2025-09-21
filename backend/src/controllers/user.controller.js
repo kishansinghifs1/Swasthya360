@@ -1,147 +1,143 @@
-// controllers/user.controller.js
-import { prisma } from "../config/prisma.config.js";
-import { hashPassword } from "../services/hashpassword.js";
-// import bcrypt from "bcrypt";
-import { comparePassword } from "../services/hashpassword.js";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// ✅ Create User Controller
-export const createUserController = async (req, res) => {
-  try {
-    console.log(req.body)
-    const { name, email, password, phone, gender, location, emergencyContact ,preferredLanguage, medicalCondition,} = req.body;
 
-    
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret";
+
+// ========================== SIGNUP ==========================
+export const signupController = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
     if (!name || !email || !password) {
-      return res.status(400).json({ error: "Name, email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Name, email, and password are required." });
     }
 
-    
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      return res.status(409).json({ error: "Email already exists" });
-    }
-    const hashPasswordd = await hashPassword(password);
-    if(!hashPasswordd){
-      return res.status(500).json({ error: "Error hashing password" });
+      return res
+        .status(400)
+        .json({ message: "User already exists with this email." });
     }
 
-    // 3. Create user
-    const newUser = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password:hashPasswordd, 
-        phone,
-        // dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
-        gender,
-        // address,
-        preferredLanguage,
-        medicalCondition,
-        location,
-        emergencyContact
-      }
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+      data: { name, email, password: hashedPassword },
     });
 
-    // 4. Return success
-    return await res.status(201).json({
-      message: "User created successfully",
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        email: newUser.email,
-        createdAt: newUser.createdAt
-      }
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "7d",
     });
 
+    // Set token in HttpOnly cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      sameSite: "strict",
+    });
+
+    res.status(201).json({ user, token });
   } catch (error) {
-    console.error("Error creating user:", error);
-
-    if (error.code === "P2002") {
-      // Prisma unique constraint error
-      return res.status(409).json({ error: "Duplicate field: email must be unique" });
-    }
-
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
 
-// ✅ Get User by Email
-export const getUserByEmailController = async (req, res) => {
-  try {
-    const { email } = req.params;
-
-    const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    return res.status(200).json({ user });
-  } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
-// ✅ Get User by ID
-export const getUserByIdController = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const user = await prisma.user.findUnique({ where: { id: parseInt(id) } });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    return res.status(200).json({ user });
-  } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
+// ========================== LOGIN ==========================
 export const loginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
 
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-
-    // 1. Find user
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      return res.status(401).json({ error: "Invalid email or password" });
-    }
+    if (!user) return res.status(401).json({ message: "Invalid credentials." });
 
-   
-    const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Invalid email or password" });
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(401).json({ message: "Invalid credentials." });
 
-    // 3. Generate JWT
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
-   
+    // Set token in HttpOnly cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", 
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
-    return res.status(200).json({
-      message: "Login successful",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    res.status(200).json({ user, token });
   } catch (error) {
-    console.error("Login error:", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
+
+// ========================== UPDATE USER ==========================
+
+export const updateUserController = async (req, res) => {
+  try {
+    const userId = req.userId; // Set by authMiddleware
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const {
+      name,
+      email,
+      password,
+      age,
+      phone,
+      gender,
+      location,
+      emergencyContact,
+      preferredLanguage,
+      medicalCondition,
+      allergies,
+      currentMedication,
+      medicalConditions,
+    } = req.body;
+
+    const updateData = {};
+
+    if (name) updateData.name = name;
+    if (email) updateData.email = email;
+    if (password) updateData.password = await bcrypt.hash(password, 10);
+    if (age !== undefined) updateData.age = age;
+    if (phone !== undefined) updateData.phone = phone; // BigInt okay in Prisma
+    if (gender) updateData.gender = gender;
+    if (location) updateData.location = location;
+    if (emergencyContact) updateData.emergencyContact = emergencyContact;
+    if (preferredLanguage) updateData.preferredLanguage = preferredLanguage;
+    if (medicalCondition) updateData.medicalCondition = medicalCondition;
+    if (allergies) updateData.allergies = allergies;
+    if (currentMedication) updateData.currentMedication = currentMedication;
+    if (medicalConditions) updateData.medicalConditions = medicalConditions;
+
+    // Perform the update
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    // Convert BigInt fields to string for JSON serialization
+    const safeUser = {
+      ...updatedUser,
+      phone: updatedUser.phone?.toString(),
+    };
+
+    res.status(200).json({ user: safeUser });
+  } catch (error) {
+    console.error("UpdateUserController Error:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+
