@@ -1,6 +1,5 @@
 import { prisma } from "../config/prisma.config.js";
 
-// ✅ Add Vaccination Report
 export const addVaccinationReportController = async (req, res) => {
   try {
     const { userId, vaccineName, dateAdministered, notes } = req.body;
@@ -9,13 +8,11 @@ export const addVaccinationReportController = async (req, res) => {
       return res.status(400).json({ error: "userId, vaccineName and dateAdministered are required" });
     }
 
-    // Check if user exists
     const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Add vaccination report
     const report = await prisma.vaccinationReport.create({
       data: {
         vaccineName,
@@ -35,14 +32,14 @@ export const addVaccinationReportController = async (req, res) => {
   }
 };
 
-// ✅ Get all vaccination reports for a user
+
 export const getVaccinationReportsController = async (req, res) => {
   try {
     const { userId } = req.params;
 
     const reports = await prisma.vaccinationReport.findMany({
       where: { userId },
-      orderBy: { dateAdministered: "desc" }, // latest first
+      orderBy: { dateAdministered: "desc" },
     });
 
     return res.status(200).json({ reports });
