@@ -1,0 +1,73 @@
+import { useState } from "react";
+import ChatHeader from "./ChatHeader";
+import ChatMessages from "./ChatMessages";
+import ChatInput from "./ChatInput";
+
+const ChatbotParent = () => {
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: "bot",
+      type: "text", // ✅ Added type so it renders like other messages
+      text: "Hello! I'm Swasthya360, your AI Health Assistant. How can I help you today?",
+      image: null,  // keep structure consistent
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    },
+  ]);
+
+  // ✅ handle sending messages (text / image)
+  const handleSend = (content, type = "text") => {
+    if (!content) return;
+
+    const newMessage = {
+      id: Date.now(),
+      sender: "user",
+      type,
+      text: type === "text" ? content : "",
+      image: type === "image" ? content : null,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    };
+
+    setMessages((prev) => [...prev, newMessage]);
+
+    // 🔥 Demo bot reply (replace with backend)
+    if (type === "text") {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 1,
+            sender: "bot",
+            type: "text",
+            text: "Thanks for your query. I’ll connect you with health info shortly...",
+            image: null,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
+      }, 1000);
+    }
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-cyan-100 via-white to-cyan-200">
+      <div className="w-full max-w-3xl h-[80vh] flex flex-col bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-200">
+        
+        {/* ✅ Header */}
+        <ChatHeader />
+
+        {/* ✅ Messages */}
+        <ChatMessages messages={messages} />
+
+        {/* ✅ Input (with voice + image) */}
+        <ChatInput onSend={handleSend} />
+
+        {/* ✅ Disclaimer */}
+        <div className="text-xs text-gray-500 text-center p-2 border-t">
+          ⚠️ This is for informational purposes only. Consult a healthcare professional for medical advice.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatbotParent;
