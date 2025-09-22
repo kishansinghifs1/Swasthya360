@@ -9,7 +9,6 @@ const OutBreakPage = () => {
 
   return (
     <div>
-      <Header />
       <SubHeader heading={"Disease Outbreak"} />
       <div className="flex  flex-col gap-4 w-3/4 mx-auto">
         {" "}
