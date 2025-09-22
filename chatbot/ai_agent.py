@@ -1,5 +1,5 @@
 from langchain.agents import tool
-from tools import swasthya360, call_emergency
+from tools import swasthya360_agent, call_emergency
 
 
 @tool
@@ -14,28 +14,27 @@ def swasthya360_tool(input: str) -> str:
     6. Risk stratification: Emergency/Urgent/Monitor/Prevention focus
     7. Culturally sensitive health education in multiple Indian languages
     8. Clear action steps for home care and when to seek medical help
+    9. Suggest simple medications available in India with safety advice
+    10. Mental health first aid and crisis resources
     Returns comprehensive health guidance with clear action steps and urgency levels.
     """
-    return swasthya360(input)
+    return swasthya360_agent(input)
 
 
 @tool
 def call_emergency_tool() -> None:
     """
     Place an emergency call to the safety helpline's phone number via Twilio.
-    - To be triggered immediately when life-threatening symptoms or emergencies are detected.
+    - To be triggered immediately when life-threatening symptoms or heavy emergencies are detected.
     - Ensures if there is thought regarding to the suicide and self-harm the service must be called right away.
     - Returns a confirmation message after initiating the call.
     """
     call_emergency()
 
 
-# step1 : Create an AI agent & link backend
-
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.prebuilt import create_react_agent
 from config import gemini_api_key
-
 
 tools = [swasthya360_tool, call_emergency_tool]
 
@@ -48,15 +47,11 @@ graph = create_react_agent(
     tools=tools,
 )
 
-
 system_prompt = """
-You are Swasthya360, an advanced AI health companion for Indian communities specializing in early symptom detection, preventive healthcare, and emergency response.
-You have access to two tools:
-
-1.`swasthya360_tool` : use this tool for comprehensive health guidance, including symptom assessment, preventive care and vaccination schedules.
-2.`call_emergency_tool` : use this tool to place an emergency call to the safety helpline's phone number via Twilio.
-
-Always prioritize user safety. If the user describes life-threatening symptoms (e.g., chest pain, severe bleeding, difficulty breathing) or expresses suicidal thoughts/self-harm, immediately use the `call_emergency_tool` to initiate an emergency call.
+You are Swasthya360, an advanced AI health companion for Indian communities specializing in early symptom detection, preventive healthcare, and emergency response. You have access to two tools:
+1.`swasthya360_tool` : use this tool for comprehensive health guidance, including symptom assessment, preventive care , medications and vaccination schedules.
+2.`call_emergency_tool` : use this tool to place an emergency call during life-threatening events to the safety helpline's phone number via Twilio.
+Always prioritize user safety. If the user describes life-threatening symptoms (e.g., chest pain, severe bleeding, difficulty breathing , labor pain , sudden accident  ) or expresses suicidal thoughts/self-harm, immediately use the `call_emergency_tool` to initiate an emergency call.
 """
 
 
@@ -86,14 +81,14 @@ def parse_response(stream):
 
 
 # --------------------------------------------
-#  .For testing purpose only
+#  For testing purpose only
 # --------------------------------------------
 
-if __name__ == "__main__":
-    user_input = input("You:")  # get user input
-    # Use the agent to process input
-    stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
+# if __name__ == "__main__":
+#     user_input = input("You:")  # get user input
+#     # Use the agent to process input
+#     stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
 
-    tool_name, response = parse_response(stream)
-    print("Tool called:", tool_name)
-    print("AI Response:", response)
+#     tool_name, response = parse_response(stream)
+#     print("Tool called:", tool_name)
+#     print("AI Response:", response)
