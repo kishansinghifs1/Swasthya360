@@ -10,6 +10,9 @@ export const createVaccinationReport = async (req, res) => {
     if (!vaccineName) {
       return res.status(400).json({ message: "vaccineName is required." });
     }
+
+    console.log(req.userId)
+    // ✅ Check if user exists first
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
     });
@@ -17,6 +20,9 @@ export const createVaccinationReport = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
+
+    // ✅ Create vaccination report
+
     const report = await prisma.VaccinationReport.create({
       data: {
         vaccineName,
@@ -33,6 +39,12 @@ export const createVaccinationReport = async (req, res) => {
     res.status(500).json({ message: "Internal server error." });
   }
 };
+
+
+// ================= UPDATE Vaccination Report =================
+
+
+
 // ================= GET all Vaccination Reports of logged-in user =================
 export const getVaccinationReports = async (req, res) => {
   try {
