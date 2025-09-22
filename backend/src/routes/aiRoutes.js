@@ -1,4 +1,5 @@
 import express from "express";
+
 import { healthCheck, ask, askImage, askVoice, upload } from "../controllers/aiController.js";
 
 const aiRouter = express.Router();
