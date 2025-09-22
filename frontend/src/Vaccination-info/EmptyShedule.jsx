@@ -4,7 +4,7 @@ import emptyAnimation from "../assets/No-Data.json"; // your downloaded Lottie f
 
 const EmptySchedule = () => {
   return (
-    <div className="flex flex-col items-center  h-full text-gray-600">
+    <div className="flex flex-col items-center mt-15  h-full text-gray-600">
       {/* Animation */}
       <Lottie
         animationData={emptyAnimation}

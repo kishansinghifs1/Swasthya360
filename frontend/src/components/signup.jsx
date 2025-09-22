@@ -1,72 +1,86 @@
-import { X } from "lucide-react";
+import { Link } from "react-router-dom";
+import Header from "./Header.jsx";
+import Footer from "./footer.jsx";
 
-const SignUp = ({ onClose }) => {
+const SignUp = () => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
-      <div className="relative group w-full max-w-lg px-2">
-        {/* ✨ Animated shadow/glow layer */}
-        <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pink-400 via-orange-300 to-yellow-400 opacity-40 blur-2xl animate-movingShadow group-hover:opacity-60"></div>
+    <>
+      {/* Hero Section in background */}
+      <div className="relative">
+        <Header />
+        <section className="relative min-h-screen">{/* <Hero /> */}</section>
+      </div>
 
-        {/* Card */}
-        <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 p-8 flex flex-col gap-6">
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
-          >
-            <X size={22} />
-          </button>
+      {/* Overlay for blur + highlight sign-up card */}
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
+        <div className="relative group">
+          {/* ✨ Animated shadow/glow layer */}
+          <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pink-400 via-orange-300 to-yellow-400 opacity-50 blur-2xl animate-movingShadow group-hover:opacity-70"></div>
 
-          {/* Logo + Title */}
-          <div className="flex flex-col items-center gap-2">
-            <img
-              src="/Swasthya360.png"
-              alt="Swasthya360 Logo"
-              className="h-16 w-16 object-cover rounded-full border-4 border-cyan-400 shadow-md"
-            />
-            <h1 className="text-blue-950 text-2xl font-bold">Create Account</h1>
-            <p className="text-gray-600 text-sm">Fill in your details to sign up</p>
-          </div>
+          {/* SignUp Card */}
+          <div className="relative flex flex-col justify-center items-center gap-6 w-full max-w-md p-8 rounded-2xl shadow-xl bg-white/90 backdrop-blur-md border border-gray-200">
+            {/* Logo & Heading */}
+            <div className="flex items-center gap-2">
+              <img
+                src="/Swasthya360.png"
+                alt="Swasthya360 Logo"
+                className="h-16 w-16 object-cover rounded-full border-4 border-cyan-400 shadow-lg"
+              />
+              <div className="text-center space-y-1">
+                <h1 className="text-green-800 text-3xl font-bold">
+                  Create Account
+                </h1>
+                <h2 className="text-gray-600 text-base">
+                  Fill the details to sign up
+                </h2>
+              </div>
+            </div>
 
-          {/* Form */}
-          <form className="space-y-4 w-full">
-            <input
-              type="text"
-              placeholder="Full Name"
-              className="w-full px-4 py-2 rounded-lg border border-blue-300 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 rounded-lg border border-blue-300 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full px-4 py-2 rounded-lg border border-blue-300 focus:ring-2 focus:ring-blue-500 outline-none"
-            />
-            <button
-              type="submit"
-              className="w-full bg-cyan-700 hover:bg-cyan-800 text-white font-semibold py-2 rounded-lg transition-all"
-            >
-              Sign Up
-            </button>
-          </form>
+            <form className="flex flex-col gap-4 justify-center items-center w-full">
+              <label className="w-full">
+                Full name:
+                <input
+                  type="text"
+                  placeholder="Enter your Full name"
+                  className="border border-gray-400 p-2 rounded-lg w-full"
+                />
+              </label>
 
-          {/* Already have account */}
-          <div className="flex justify-center items-center gap-2 text-sm">
-            <p className="text-gray-600">Already have an account?</p>
-            <button
-              type="button"
-              onClick={onClose} 
-              className="text-cyan-700 font-semibold hover:underline"
-            >
-              Sign In
-            </button>
+              <label className="w-full">
+                Email:
+                <input
+                  type="email"
+                  placeholder="Enter your Email"
+                  className="border border-gray-400 p-2 rounded-lg w-full"
+                />
+              </label>
+
+              <label className="w-full">
+                Password:
+                <input
+                  type="password"
+                  placeholder="Enter your Password"
+                  className="border border-gray-400 p-2 rounded-lg w-full"
+                />
+              </label>
+            </form>
+
+            {/* Already have account */}
+            <div className="flex justify-center items-center gap-2 text-sm">
+              <p className="text-gray-600">Already have an account?</p>
+              <Link
+                to="/signin"
+                className="text-green-700 font-semibold hover:underline"
+              >
+                Sign In
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <Footer />
+    </>
   );
 };
 

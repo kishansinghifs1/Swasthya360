@@ -1,7 +1,9 @@
 import AddVaccine from "./AddVaccine";
+import VaccineList from "./VaccineList";
 import { useState } from "react";
 import EmptySchedule from "./EmptyShedule";
 import useVaccineStore from "../Store/VaccineStore";
+import ShedVaccineCard from "./ShedVaccineCard";
 const VaccineShedule = () => {
   const [addActive, setAddActive] = useState(false);
   const { myVaccines } = useVaccineStore();
@@ -14,13 +16,9 @@ const VaccineShedule = () => {
       {myVaccines.length === 0 ? (
         <EmptySchedule />
       ) : (
-        <div className="text-black">
-          {myVaccines.map((vac, ind) => (
-            <div key={ind}>
-              {" "}
-              <p>{vac.name}</p>
-              <p>{vac.dueDate}</p>
-            </div>
+        <div className="overflow-y-auto h-[60vh]">
+          {myVaccines.map((vac) => (
+            <ShedVaccineCard vaccine={vac} />
           ))}
         </div>
       )}
