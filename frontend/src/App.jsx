@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
+import Header from "./components/header";
 import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import ServiceSection from "./components/ServiceSection";
