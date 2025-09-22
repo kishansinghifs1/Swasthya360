@@ -7,8 +7,23 @@ import base64
 from groq import Groq
 from config import groq_api_key
 from ai_agent import graph, system_prompt, parse_response
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",  # optional, in case you use 127.0.0.1
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,       # Frontend origins allowed
+    allow_credentials=True,
+    allow_methods=["*"],         # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],         # Allow all headers
+)
 
 client = Groq(api_key=groq_api_key)
 
