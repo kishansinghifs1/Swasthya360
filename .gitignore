@@ -63,3 +63,15 @@ coverage.xml
 # =======================
 # Vite specific
 # =======================
+# Python (medical_chatbot)
+venv/
+.env
+.python-version
+*.sqlite3
+*.log
+*.pot
+*.pyc
+
+# General
+.venv/
+*.env

@@ -20,7 +20,10 @@ const ChatbotContainer = () => {
       id: Date.now(),
       sender: "user",
       text,
-      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
 
     setMessages((prev) => [...prev, newMessage]);
@@ -32,7 +35,10 @@ const ChatbotContainer = () => {
           id: Date.now() + 1,
           sender: "bot",
           text: "Thanks for your query. I’ll guide you shortly...",
-          time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
         },
       ]);
     }, 1000);
@@ -43,9 +49,11 @@ const ChatbotContainer = () => {
       <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-200">
         <ChatHeader />
         <ChatMessages messages={messages} />
+
         <ChatInput onSend={handleSend} />
         <div className="text-xs text-gray-500 text-center p-2 border-t">
-          ⚠️ This is for informational purposes only. Consult a healthcare professional for medical advice.
+          ⚠️ This is for informational purposes only. Consult a healthcare
+          professional for medical advice.
         </div>
       </div>
     </div>
