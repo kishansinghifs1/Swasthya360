@@ -1,13 +1,31 @@
 import fetch from "node-fetch";
 import multer from "multer";
 import FormData from "form-data";
+import { PrismaClient } from "@prisma/client";
 
-const FASTAPI_URL = "http://127.0.0.1:8000";
+const prisma = new PrismaClient();
+const FASTAPI_URL = "https://swasthya360-6.onrender.com";
 
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 50 * 1024 * 1024 },
 });
+
+// Helper function to save chat history
+const saveChatHistory = async (userId, message, sender) => {
+    try {
+        await prisma.chatHistory.create({
+            data: {
+                userId,
+                message,
+                sender
+            }
+        });
+    } catch (error) {
+        console.error('Error saving chat history:', error);
+        // Don't throw error, just log it to avoid disrupting main functionality
+    }
+};
 
 export const healthCheck = async (req, res) => {
     try {
@@ -25,10 +43,16 @@ export const healthCheck = async (req, res) => {
 
 export const ask = async (req, res) => {
     try {
-        const { message } = req.body;
+        const { message, userId } = req.body;
         if (!message || typeof message !== 'string') {
             return res.status(400).json({ error: "Message is required and must be a string" });
         }
+        if (!userId) {
+            return res.status(400).json({ error: "userId is required" });
+        }
+
+        // Save user message
+        await saveChatHistory(userId, message, 'USER');
 
         const response = await fetch(`${FASTAPI_URL}/ask`, {
             method: 'POST',
@@ -42,6 +66,13 @@ export const ask = async (req, res) => {
         }
 
         const aiResponse = await response.json();
+        
+        // Save agent response
+        if (aiResponse.response || aiResponse.message) {
+            const agentMessage = aiResponse.response || aiResponse.message || JSON.stringify(aiResponse);
+            await saveChatHistory(userId, agentMessage, 'AGENT');
+        }
+
         res.json({ success: true, data: aiResponse });
 
     } catch (error) {
@@ -59,8 +90,10 @@ export const ask = async (req, res) => {
 
 export const askImage = async (req, res) => {
     try {
+        const { userId } = req.body;
         if (!req.file) return res.status(400).json({ error: "Image file is required" });
         if (!req.file.mimetype.startsWith('image/')) return res.status(400).json({ error: "File must be an image" });
+        if (!userId) return res.status(400).json({ error: "userId is required" });
 
         const formData = new FormData();
         formData.append('file', req.file.buffer, {
@@ -80,6 +113,13 @@ export const askImage = async (req, res) => {
         }
 
         const aiResponse = await response.json();
+        
+        // Save only agent response for image (as requested)
+        if (aiResponse.response || aiResponse.message) {
+            const agentMessage = aiResponse.response || aiResponse.message || JSON.stringify(aiResponse);
+            await saveChatHistory(userId, `[Image Analysis] ${agentMessage}`, 'AGENT');
+        }
+
         res.json({ success: true, data: aiResponse });
 
     } catch (error) {
@@ -97,7 +137,9 @@ export const askImage = async (req, res) => {
 
 export const askVoice = async (req, res) => {
     try {
+        const { userId } = req.body;
         if (!req.file) return res.status(400).json({ error: "Audio file is required" });
+        if (!userId) return res.status(400).json({ error: "userId is required" });
 
         const allowedAudioTypes = [
             "audio/mpeg","audio/mp4","audio/m4a","audio/wav","audio/webm","audio/ogg","audio/flac"
@@ -126,6 +168,13 @@ export const askVoice = async (req, res) => {
         }
 
         const aiResponse = await response.json();
+        
+        // Save only agent response for voice (as requested)
+        if (aiResponse.response || aiResponse.message) {
+            const agentMessage = aiResponse.response || aiResponse.message || JSON.stringify(aiResponse);
+            await saveChatHistory(userId, `[Voice Message] ${agentMessage}`, 'AGENT');
+        }
+
         res.json({ success: true, data: aiResponse });
 
     } catch (error) {
