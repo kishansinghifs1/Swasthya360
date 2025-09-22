@@ -25,15 +25,19 @@ const SeveritySlider = () => {
         <span>3</span>
         <span>4</span>
         <span>5</span>
+        <span>6</span>
+        <span>7</span>
+        <span>8</span>
+        <span>9</span>
+        <span>10</span>
       </div>
-
       {/* Selected Value */}
       <div className="mt-4 text-center">
         <span
           className={`px-4 py-2 rounded-full font-bold text-white ${
-            severity <= 2
+            severity <= 4
               ? "bg-green-500"
-              : severity == 3
+              : severity == 7
               ? "bg-yellow-500"
               : "bg-red-500"
           }`}

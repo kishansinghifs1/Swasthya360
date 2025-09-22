@@ -1,15 +1,52 @@
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import useUserStore from "../store/userStore";
 
 const SignUp = ({ onClose, onSwitch }) => {
   const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
+  const setToken = useUserStore((state) => state.setToken);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: send signup data to API
 
-    onClose?.(); // close modal if used inside modal
-    navigate("/landing"); // ✅ redirect
+    try {
+      const res = await fetch(
+        "https://swasthya360-7.onrender.com/api/v1/users/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Signup failed");
+
+      // Save in Zustand
+      setUser(data.user);
+      setToken(data.token);
+
+      // Save token in localStorage as Bearer
+      localStorage.setItem("token", `Bearer ${data.token}`);
+
+      onClose?.(); // close modal
+      navigate("/landing");
+    } catch (error) {
+      console.error("Signup error:", error);
+    }
   };
 
   return (
@@ -43,17 +80,26 @@ const SignUp = ({ onClose, onSwitch }) => {
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="text"
+              name="name"
               placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
             />
             <input
               type="email"
+              name="email"
               placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
             />
             <input
               type="password"
+              name="password"
               placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
             />
             <button
