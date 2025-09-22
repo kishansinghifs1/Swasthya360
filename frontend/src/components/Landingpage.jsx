@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Hero from "./hero";
-import Header from "./Header";
+import Header from "./header";
 import Dashboard from "./dashboard";
 import Footer from "./Footer";
 import AboutSwasthya from "./AboutSwasthya";
@@ -10,13 +10,15 @@ const Landingpage = () => {
 
   // 🔥 Replace this with real auth check later
   const isAuthenticated = true;
+  const onSignOutClick=true;
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header with Profile Icon */}
-      <Header 
-        onMenuClick={() => setIsDashboardOpen(true)} 
-        isAuthenticated={isAuthenticated} 
+      <Header
+        onMenuClick={() => setIsDashboardOpen(true)}
+        isAuthenticated={isAuthenticated}
+        onSignOutClick={onSignOutClick}
       />
 
       {/* Dashboard Sidebar */}
@@ -29,7 +31,7 @@ const Landingpage = () => {
       <main className="flex-grow">
         <Hero />
       </main>
-      <AboutSwasthya/>
+      <AboutSwasthya />
 
       {/* Footer */}
       <Footer />

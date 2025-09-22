@@ -5,8 +5,6 @@ import Footer from "./components/Footer";
 import HeroSection from "./components/HeroSection";
 import ServiceSection from "./components/ServiceSection";
 import FeaturesSection from "./components/FeatureSection";
-import SignIn from "./components/signin";
-import SignUp from "./components/signup";
 import Landingpage from "./components/Landingpage";
 import CheckSymptom from "./Check-Symptoms/CheckSymptom";
 import UserDetails from "./User-Details/UserDetails";
@@ -14,9 +12,12 @@ import ChatbotParent from "./Health-Chatbot/ChatbotParent";
 import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
 
+// 🔹 Import the AuthModal wrapper
+import AuthModal from "./components/AuthModal";
+
 function App() {
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showSignIn, setShowSignIn] = useState(false);
+  const [showAuth, setShowAuth] = useState(false); // controls modal open
+  const [authView, setAuthView] = useState("signin"); // signin | signup
 
   return (
     <Routes>
@@ -26,40 +27,50 @@ function App() {
         element={
           <div>
             <Header
-              onSignUpClick={() => setShowSignUp(true)}
-              onSignInClick={() => setShowSignIn(true)}
+              onSignUpClick={() => {
+                setAuthView("signup");
+                setShowAuth(true);
+              }}
+              onSignInClick={() => {
+                setAuthView("signin");
+                setShowAuth(true);
+              }}
             />
             <HeroSection />
             <FeaturesSection />
             <ServiceSection />
             <Footer />
 
-            {/* Modals on homepage */}
-            {showSignUp && <SignUp onClose={() => setShowSignUp(false)} />}
-            {showSignIn && <SignIn onClose={() => setShowSignIn(false)} />}
+            {/* ✅ Auth Modal */}
+            {showAuth && (
+              <AuthModal
+                onClose={() => setShowAuth(false)}
+                initialView={authView}
+              />
+            )}
           </div>
         }
       />
 
-      {/* Direct SignIn page */}
+      {/* Full-page SignIn */}
       <Route
         path="/signin"
         element={
           <div className="relative min-h-screen flex flex-col">
             <Header />
-            <SignIn /> {/* ✅ no onClose for full-page */}
+            <AuthModal onClose={() => {}} initialView="signin" />
             <Footer />
           </div>
         }
       />
 
-      {/* Direct SignUp page */}
+      {/* Full-page SignUp */}
       <Route
         path="/signup"
         element={
           <div className="relative min-h-screen flex flex-col">
             <Header />
-            <SignUp />
+            <AuthModal onClose={() => {}} initialView="signup" />
             <Footer />
           </div>
         }
@@ -74,10 +85,7 @@ function App() {
       <Route path="/disease-outbreaks" element={<OutBreakPage />} />
 
       {/* Example profile page */}
-      <Route
-        path="/profile"
-        element={<h1 className="p-6">Profile Page 1</h1>}
-      />
+      <Route path="/profile" element={<h1 className="p-6">Profile Page 1</h1>} />
     </Routes>
   );
 }
