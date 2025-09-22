@@ -11,7 +11,7 @@ export const createVaccinationReport = async (req, res) => {
       return res.status(400).json({ message: "vaccineName is required." });
     }
 
-    const report = await prisma.vaccinationReport.create({
+    const report = await prisma.VaccinationReport.create({
       data: {
         vaccineName,
         description,
@@ -34,7 +34,7 @@ export const updateVaccinationReport = async (req, res) => {
     const { id } = req.params;
     const { vaccineName, description, type, dateAdministered } = req.body;
 
-    const existingReport = await prisma.vaccinationReport.findUnique({ where: { id } });
+    const existingReport = await prisma.VaccinationReport.findUnique({ where: { id } });
     if (!existingReport) {
       return res.status(404).json({ message: "Vaccination report not found." });
     }
@@ -48,7 +48,7 @@ export const updateVaccinationReport = async (req, res) => {
     if (type) updateData.type = type;
     if (dateAdministered) updateData.dateAdministered = new Date(dateAdministered);
 
-    const updatedReport = await prisma.vaccinationReport.update({
+    const updatedReport = await prisma.VaccinationReport.update({
       where: { id },
       data: updateData,
     });
@@ -63,7 +63,7 @@ export const updateVaccinationReport = async (req, res) => {
 // ================= GET all Vaccination Reports of logged-in user =================
 export const getVaccinationReports = async (req, res) => {
   try {
-    const reports = await prisma.vaccinationReport.findMany({
+    const reports = await prisma.VaccinationReport.findMany({
       where: { userId: req.userId },
       orderBy: { dateAdministered: "desc" },
     });
