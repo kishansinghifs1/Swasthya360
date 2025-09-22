@@ -10,7 +10,6 @@ import {
   UserCircle,
 } from "lucide-react";
 
-// Each card now has its own accent color 🎨
 const agents = [
   {
     name: "Symptom Checker",
@@ -66,7 +65,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-700 via-indigo-600 to-cyan-600 bg-clip-text text-transparent"
+          className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-950 via-indigo-700 to-blue-600 bg-clip-text text-transparent leading-tight md:leading-[1.2] pb-2"
         >
           Welcome to Swasthya360
         </motion.h1>

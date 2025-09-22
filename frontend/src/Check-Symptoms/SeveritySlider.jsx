@@ -1,10 +1,9 @@
-import { useState } from "react";
+import useSymptomStore from "../Store/SysmptomStore";
 
 const SeveritySlider = () => {
-  const [severity, setSeverity] = useState(3);
-
+  const { severity, setSeverity } = useSymptomStore();
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white">
+    <div className="w-full  mx-auto px-4 my-4 bg-white">
       <h2 className="text-lg font-semibold text-gray-800 mb-4">
         Select Severity
       </h2>
