@@ -14,7 +14,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",  # optional, in case you use 127.0.0.1
+    "http://127.0.0.1:3000",
+    "https://swasthya360-7.onrender.com",
 ]
 
 app.add_middleware(
