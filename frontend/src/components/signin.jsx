@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import useUserStore from "../store/userStore"; // import your Zustand store
+import useUserStore from "../store/userStore.js"; // import your Zustand store
 
 const SignIn = ({ onClose, onSwitch }) => {
   const navigate = useNavigate();
