@@ -91,7 +91,10 @@ const UserDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-blue-100 flex justify-center items-start py-10 px-4">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex justify-center items-start py-10 px-4"
+      style={{ backgroundImage: 'url("/back.png")' }} // ✅ Corrected line
+    >
       <div className="w-full max-w-4xl p-8 bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl border border-gray-200">
         <h1 className="text-3xl font-bold text-[#001F3F] mb-6 text-center">
           User Setup

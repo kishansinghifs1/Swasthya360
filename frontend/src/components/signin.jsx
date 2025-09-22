@@ -1,15 +1,26 @@
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const SignIn = ({ onClose }) => {
+const SignIn = ({ onClose, onSwitch }) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: validate credentials / API call here
+
+    onClose?.(); // close modal if used inside modal
+    navigate("/landing"); // ✅ redirect
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
       <div className="relative group w-full max-w-2xl px-4">
-        {/* ✨ Animated glow layer */}
+        {/* Glow */}
         <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-yellow-400 via-pink-400 to-yellow-400 opacity-40 blur-2xl animate-movingShadow group-hover:opacity-60"></div>
 
-        {/* Sign In Card */}
+        {/* Card */}
         <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 p-10 flex flex-col gap-6 w-full">
-          {/* Close Button */}
+          {/* Close */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
@@ -24,12 +35,12 @@ const SignIn = ({ onClose }) => {
               alt="Swasthya360 Logo"
               className="h-20 w-20 object-cover rounded-full border-4 border-cyan-400 shadow-md"
             />
-            <h1 className="text-blue-950  text-2xl font-bold">Welcome Back</h1>
+            <h1 className="text-blue-950 text-2xl font-bold">Welcome Back</h1>
             <p className="text-gray-600 text-sm">Sign in to your account</p>
           </div>
 
           {/* Form */}
-          <form className="flex flex-col gap-4 w-full">
+          <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Username"
@@ -53,11 +64,11 @@ const SignIn = ({ onClose }) => {
             Forgot Password?
           </p>
 
-          {/* Sign Up Link */}
+          {/* Switch to Sign Up */}
           <div className="flex justify-center items-center gap-2 text-sm">
             <p className="text-gray-600">Don’t have an account?</p>
             <button
-              onClick={onClose} 
+              onClick={onSwitch}
               className="text-cyan-700 font-semibold hover:underline"
             >
               Sign Up

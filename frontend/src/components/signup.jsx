@@ -1,16 +1,26 @@
 import { X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const SignUp = ({ onClose }) => {
+const SignUp = ({ onClose, onSwitch }) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // TODO: send signup data to API
+
+    onClose?.(); // close modal if used inside modal
+    navigate("/landing"); // ✅ redirect
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
       <div className="relative group w-full max-w-2xl px-4">
-        {/* ✨ Animated glow layer */}
+        {/* Glow */}
         <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-pink-400 via-orange-300 to-yellow-400 opacity-40 blur-2xl animate-movingShadow group-hover:opacity-60"></div>
 
-        {/* Sign Up Card */}
+        {/* Card */}
         <div className="relative bg-white rounded-2xl shadow-xl border border-gray-200 p-10 flex flex-col gap-6 w-full">
-          {/* Close Button */}
+          {/* Close */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
@@ -30,7 +40,7 @@ const SignUp = ({ onClose }) => {
           </div>
 
           {/* Form */}
-          <form className="flex flex-col gap-4 w-full">
+          <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="text"
               placeholder="Full Name"
@@ -54,16 +64,15 @@ const SignUp = ({ onClose }) => {
             </button>
           </form>
 
-          {/* Already have account */}
+          {/* Switch to Sign In */}
           <div className="flex justify-center items-center gap-2 text-sm">
             <p className="text-gray-600">Already have an account?</p>
-            <Link
-              to="/signin"
-              onClick={onClose}
+            <button
+              onClick={onSwitch}
               className="text-cyan-700 font-semibold hover:underline"
             >
               Sign In
-            </Link>
+            </button>
           </div>
         </div>
       </div>
