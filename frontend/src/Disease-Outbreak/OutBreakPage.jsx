@@ -12,7 +12,7 @@ const OutBreakPage = () => {
     const fetchArticles = async () => {
       try {
         const res = await fetch(
-          "http://127.0.0.1:8787/api/v1/swasthya360/outbreaks"
+          "https://symtoms.kishansingh956196.workers.dev/api/v1/swasthya360/outbreaks"
         );
         if (!res.ok) throw new Error("Failed to fetch outbreak news");
         const data = await res.json();
