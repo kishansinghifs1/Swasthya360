@@ -1,17 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Swasthya360 Upload Test</title>
+    <title>Swasthya360 Voice Test</title>
 </head>
 <body>
-    <h2>Test File Upload</h2>
+    <h2>Voice Upload Test</h2>
     
-    <form action="http://localhost:8000/test-upload" method="post" enctype="multipart/form-data">
-        <div>
-            <label>Text:</label><br>
-            <input type="text" name="text" placeholder="Enter some text">
-        </div><br>
-        <button type="submit">Upload</button>
-    </form>
+    <button id="recordBtn">Start Recording</button>
+    <button id="stopBtn" disabled>Stop Recording</button>
+    <p id="status"></p>
+    <p><strong>AI Response:</strong> <span id="aiResponse"></span></p>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+
+        const recordBtn = document.getElementById("recordBtn");
+        const stopBtn = document.getElementById("stopBtn");
+        const status = document.getElementById("status");
+        const aiResponse = document.getElementById("aiResponse");
+
+        recordBtn.addEventListener("click", async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstart = () => {
+                    status.textContent = "Recording...";
+                    recordBtn.disabled = true;
+                    stopBtn.disabled = false;
+                };
+
+                mediaRecorder.start();
+            } catch (err) {
+                console.error("Error accessing microphone:", err);
+                alert("Microphone access is required!");
+            }
+        });
+
+        stopBtn.addEventListener("click", () => {
+            mediaRecorder.onstop = async () => {
+                status.textContent = "Uploading audio...";
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                audioChunks = [];
+
+                const formData = new FormData();
+                formData.append('file', audioBlob, 'recording.webm');
+
+                try {
+                    const response = await fetch("http://localhost:3000/api/v1/swasthya360/ask/voice", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Server error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    aiResponse.textContent = JSON.stringify(data.data);
+                    status.textContent = "Done!";
+                } catch (err) {
+                    console.error(err);
+                    status.textContent = "Error uploading audio!";
+                }
+
+                recordBtn.disabled = false;
+                stopBtn.disabled = true;
+            };
+
+            mediaRecorder.stop();
+        });
+    </script>
 </body>
 </html>

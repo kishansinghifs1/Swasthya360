@@ -1,11 +1,12 @@
 import express from "express";
- // You may need to install: npm install node-fetch
-import { authMiddleware } from "../middleware/auth.middleware.js";
-import { askAI } from "../controllers/ai.controller.js";
+
+import { healthCheck, ask, askImage, askVoice, upload } from "../controllers/aiController.js";
+
 const aiRouter = express.Router();
 
-
-
-aiRouter.post("/ask",authMiddleware,askAI )
+aiRouter.get("/health", healthCheck);
+aiRouter.post("/ask", ask);
+aiRouter.post("/ask/image", upload.single('file'), askImage);
+aiRouter.post("/ask/voice", upload.single('file'), askVoice);
 
 export default aiRouter;
