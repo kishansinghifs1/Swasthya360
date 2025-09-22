@@ -2,19 +2,24 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import EmergencyButton from "./EmergencyButton";
 
-const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick }) => {
+const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, onSignOutClick }) => {
   const location = useLocation();
 
   let hideEmergency = false;
   let hideNavMenu = false;
   let hideAuthButton = false;
+  let showSignOut = false;
 
+  // Hide on signup & signin pages
   if (location.pathname === "/signup" || location.pathname === "/signin") {
     hideEmergency = true;
     hideNavMenu = true;
     hideAuthButton = true;
-  } else if (location.pathname === "/landing") {
+  } 
+  // Landing page → hide nav, show SignOut
+  else if (location.pathname === "/landing") {
     hideNavMenu = true;
+    showSignOut = true;
   }
 
   return (
@@ -57,17 +62,15 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick }) 
         <div className="ml-auto flex items-center space-x-4 md:space-x-6">
           {!hideEmergency && <EmergencyButton />}
 
-          {!hideAuthButton && (
+          {/* Auth Buttons */}
+          {!hideAuthButton && !showSignOut && (
             <div className="flex space-x-3">
-              {/* ✅ Sign In can be modal OR route */}
               <button
                 onClick={onSignInClick}
                 className="px-5 py-2 md:px-6 md:py-3 bg-[#24a9ab] hover:bg-[#00ced1] text-white font-semibold rounded-lg shadow-md transition-all"
               >
                 Sign In
               </button>
-
-              {/* ✅ Sign Up same as before */}
               <button
                 onClick={onSignUpClick}
                 className="px-5 py-2 md:px-6 md:py-3 bg-[#008080] hover:bg-[#00CED1] text-white font-semibold rounded-lg shadow-md transition-all"
@@ -75,6 +78,15 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick }) 
                 Sign Up
               </button>
             </div>
+          )}
+
+          {showSignOut && (
+            <button
+              onClick={onSignOutClick}
+              className="px-5 py-2 md:px-6 md:py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg shadow-md transition-all"
+            >
+              Sign Out
+            </button>
           )}
         </div>
       </div>
