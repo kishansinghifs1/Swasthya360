@@ -2,7 +2,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import EmergencyButton from "./EmergencyButton";
 
-const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, onSignOutClick }) => {
+const Header = ({
+  onMenuClick,
+  isAuthenticated,
+  onSignUpClick,
+  onSignInClick,
+  onSignOutClick,
+}) => {
   const location = useLocation();
 
   let hideEmergency = false;
@@ -15,7 +21,7 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, on
     hideEmergency = true;
     hideNavMenu = true;
     hideAuthButton = true;
-  } 
+  }
   // Landing page → hide nav, show SignOut
   else if (location.pathname === "/landing") {
     hideNavMenu = true;
@@ -28,7 +34,7 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, on
         {/* Left: Hamburger Menu (only when logged in) */}
         {isAuthenticated && (
           <button
-            onClick={onMenuClick}
+            onClick={() => onMenuClick?.()}
             className="p-2 rounded-full hover:bg-gray-100 transition"
           >
             <Menu className="w-10 h-10 text-[#008080]" />
@@ -50,11 +56,21 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, on
         {/* Center: Navigation */}
         {!hideNavMenu && (
           <nav className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex space-x-10 text-base font-medium">
-            <a href="#home" className="hover:text-[#008080] transition">Home</a>
-            <a href="#features" className="hover:text-[#008080] transition">Features</a>
-            <a href="#services" className="hover:text-[#008080] transition">Services</a>
-            <a href="#aboutus" className="hover:text-[#008080] transition">About Us</a>
-            <a href="#contactus" className="hover:text-[#008080] transition">Contact Us</a>
+            <a href="#home" className="hover:text-[#008080] transition">
+              Home
+            </a>
+            <a href="#features" className="hover:text-[#008080] transition">
+              Features
+            </a>
+            <a href="#services" className="hover:text-[#008080] transition">
+              Services
+            </a>
+            <a href="#aboutus" className="hover:text-[#008080] transition">
+              About Us
+            </a>
+            <a href="#contactus" className="hover:text-[#008080] transition">
+              Contact Us
+            </a>
           </nav>
         )}
 
@@ -66,13 +82,13 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, on
           {!hideAuthButton && !showSignOut && (
             <div className="flex space-x-3">
               <button
-                onClick={onSignInClick}
+                onClick={() => onSignInClick?.()}
                 className="px-5 py-2 md:px-6 md:py-3 bg-[#24a9ab] hover:bg-[#00ced1] text-white font-semibold rounded-lg shadow-md transition-all"
               >
                 Sign In
               </button>
               <button
-                onClick={onSignUpClick}
+                onClick={() => onSignUpClick?.()}
                 className="px-5 py-2 md:px-6 md:py-3 bg-[#008080] hover:bg-[#00CED1] text-white font-semibold rounded-lg shadow-md transition-all"
               >
                 Sign Up
@@ -82,7 +98,7 @@ const Header = ({ onMenuClick, isAuthenticated, onSignUpClick, onSignInClick, on
 
           {showSignOut && (
             <button
-              onClick={onSignOutClick}
+              onClick={() => onSignOutClick?.()}
               className="px-5 py-2 md:px-6 md:py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg shadow-md transition-all"
             >
               Sign Out
