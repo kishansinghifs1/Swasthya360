@@ -1,15 +1,12 @@
 import { create } from "zustand";
-// import { v4 as uuidv4 } from "uuid"; // optional, if you want real UUIDs
-
 const useVaccineStore = create((set) => ({
   myVaccines: [],
 
-  // Actions
   addVaccine: ({ vaccineName, description, type, dateAdministered, userId }) =>
     set((state) => {
       const now = new Date().toISOString();
       const newVaccine = {
-        id: Date.now(), // or uuidv4()
+        id: Date.now(),
         vaccineName,
         description,
         type,

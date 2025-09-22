@@ -28,10 +28,15 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("https://swasthya360.onrender.com/api/users/update", {
-          method: "GET",
-          credentials: "include", // if auth cookie/session
-        });
+        const res = await fetch(
+          "https://swasthya360.onrender.com/api/users/update",
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(userDetails),
+          }
+        );
         if (res.ok) {
           const data = await res.json();
           setUserDetails(data);
@@ -43,16 +48,18 @@ const UserDetails = () => {
     fetchUser();
   }, []);
 
-  // ✅ Save details to backend
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://swasthya360.onrender.com/api/users/update", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // send cookies if needed
-        body: JSON.stringify(userDetails),
-      });
+      const res = await fetch(
+        "https://swasthya360.onrender.com/api/users/update",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // send cookies if needed
+          body: JSON.stringify(userDetails),
+        }
+      );
 
       if (res.ok) {
         alert("User details saved successfully ✅");
@@ -101,9 +108,15 @@ const UserDetails = () => {
         </h1>
 
         {step === 1 ? (
-          <PersonalDetails userDetails={userDetails} setUserDetails={setUserDetails} />
+          <PersonalDetails
+            userDetails={userDetails}
+            setUserDetails={setUserDetails}
+          />
         ) : (
-          <MedicalDetails userDetails={userDetails} setUserDetails={setUserDetails} />
+          <MedicalDetails
+            userDetails={userDetails}
+            setUserDetails={setUserDetails}
+          />
         )}
 
         {/* Navigation Buttons */}

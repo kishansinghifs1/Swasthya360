@@ -14,18 +14,26 @@ const Header = ({
   let hideEmergency = false;
   let hideNavMenu = false;
   let hideAuthButton = false;
-  let showSignOut = false;
+  let forceSignOut = false;
 
-  // Hide on signup & signin pages
+  // Pages where we hide SignIn/SignUp and force show SignOut
+  const protectedRoutes = [
+    "/landing",
+    "/check-symptoms",
+    "/user-details",
+    "/health-chatbot",
+    "/vaccination-info",
+    "/disease-outbreaks",
+  ];
+
   if (location.pathname === "/signup" || location.pathname === "/signin") {
+    // On auth pages → hide everything
     hideEmergency = true;
     hideNavMenu = true;
     hideAuthButton = true;
-  }
-  // Landing page → hide nav, show SignOut
-  else if (location.pathname === "/landing") {
-    hideNavMenu = true;
-    showSignOut = true;
+  } else if (protectedRoutes.includes(location.pathname)) {
+    // On protected pages → show only SignOut
+    forceSignOut = true;
   }
 
   return (
@@ -78,31 +86,30 @@ const Header = ({
         <div className="ml-auto flex items-center space-x-4 md:space-x-6">
           {!hideEmergency && <EmergencyButton />}
 
-          {/* Auth Buttons */}
-          {!hideAuthButton && !showSignOut && (
-            <div className="flex space-x-3">
-              <button
-                onClick={() => onSignInClick?.()}
-                className="px-5 py-2 md:px-6 md:py-3 bg-[#24a9ab] hover:bg-[#00ced1] text-white font-semibold rounded-lg shadow-md transition-all"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => onSignUpClick?.()}
-                className="px-5 py-2 md:px-6 md:py-3 bg-[#008080] hover:bg-[#00CED1] text-white font-semibold rounded-lg shadow-md transition-all"
-              >
-                Sign Up
-              </button>
-            </div>
-          )}
-
-          {showSignOut && (
+          {forceSignOut || isAuthenticated ? (
             <button
               onClick={() => onSignOutClick?.()}
               className="px-5 py-2 md:px-6 md:py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg shadow-md transition-all"
             >
               Sign Out
             </button>
+          ) : (
+            !hideAuthButton && (
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => onSignInClick?.()}
+                  className="px-5 py-2 md:px-6 md:py-3 bg-[#24a9ab] hover:bg-[#00ced1] text-white font-semibold rounded-lg shadow-md transition-all"
+                >
+                  Sign In
+                </button>
+                <button
+                  onClick={() => onSignUpClick?.()}
+                  className="px-5 py-2 md:px-6 md:py-3 bg-[#008080] hover:bg-[#00CED1] text-white font-semibold rounded-lg shadow-md transition-all"
+                >
+                  Sign Up
+                </button>
+              </div>
+            )
           )}
         </div>
       </div>
