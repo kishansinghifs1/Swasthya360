@@ -1,7 +1,6 @@
 from langchain.agents import tool
 from tools import swasthya360, call_emergency
 
-
 @tool
 def swasthya360_tool(input: str) -> str:
     """
@@ -18,7 +17,6 @@ def swasthya360_tool(input: str) -> str:
     """
     return swasthya360(input)
 
-
 @tool
 def call_emergency_tool() -> None:
     """
@@ -29,13 +27,10 @@ def call_emergency_tool() -> None:
     """
     call_emergency()
 
-
 # step1 : Create an AI agent & link backend
-
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.prebuilt import create_react_agent
 from config import gemini_api_key
-
 
 tools = [swasthya360_tool, call_emergency_tool]
 
@@ -47,8 +42,6 @@ graph = create_react_agent(
     llm,
     tools=tools,
 )
-
-
 system_prompt = """
 You are Swasthya360, an advanced AI health companion for Indian communities specializing in early symptom detection, preventive healthcare, and emergency response.
 You have access to two tools:
@@ -58,8 +51,6 @@ You have access to two tools:
 
 Always prioritize user safety. If the user describes life-threatening symptoms (e.g., chest pain, severe bleeding, difficulty breathing , labor pain , sudden accident , ) or expresses suicidal thoughts/self-harm, immediately use the `call_emergency_tool` to initiate an emergency call.
 """
-
-
 def parse_response(stream):
     tool_called_name = "None"
     final_response = None
@@ -83,12 +74,9 @@ def parse_response(stream):
                         final_response = msg.content
 
     return tool_called_name, final_response
-
-
 # --------------------------------------------
 #  .For testing purpose only
 # --------------------------------------------
-
 if __name__ == "__main__":
     user_input = input("You:")  # get user input
     # Use the agent to process input

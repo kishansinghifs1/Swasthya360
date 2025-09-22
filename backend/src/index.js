@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/UserRoute.js";
 import vaccinationRouter from "./routes/VaccinationRoute.js";
+import aiRoutes from "./routes/aiRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -16,9 +17,9 @@ app.use(cors({
     credentials: true 
 }));
 
-app.use("/api/users", userRoutes);
-app.use("/api/vaccinations", vaccinationRouter);
-// app.use("/api/v1/swasthya" , swasthyaRouter)
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/vaccinations", vaccinationRouter);
+app.use("/api/v1/swasthya360", aiRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
