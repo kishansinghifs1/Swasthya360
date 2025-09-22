@@ -1,9 +1,37 @@
 import express from "express";
-import fetch from "node-fetch"; // You may need to install: npm install node-fetch
+import fetch from "node-fetch";
+import multer from "multer"; 
+import FormData from "form-data"; 
 
 const aiRouter = express.Router();
 
 const FASTAPI_URL = "http://127.0.0.1:8000";
+
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 50 * 1024 * 1024, 
+    }
+});
+
+
+aiRouter.get("/health", async (req, res) => {
+    try {
+        const response = await fetch(`${FASTAPI_URL}/health`);
+        const healthData = await response.json();
+        res.json({
+            success: true,
+            data: healthData
+        });
+    } catch (error) {
+        console.error('Health check failed:', error);
+        res.status(503).json({
+            error: "AI service is currently unavailable",
+            message: "Could not connect to AI agent"
+        });
+    }
+});
+
 
 aiRouter.post("/ask", async (req, res) => {
     try {
@@ -13,6 +41,7 @@ aiRouter.post("/ask", async (req, res) => {
                 error: "Message is required and must be a string" 
             });
         }
+        
         const response = await fetch(`${FASTAPI_URL}/ask`, {
             method: 'POST',
             headers: {
@@ -22,7 +51,8 @@ aiRouter.post("/ask", async (req, res) => {
         });
 
         if (!response.ok) {
-            throw new Error(`FastAPI responded with status: ${response.status}`);
+            const errorText = await response.text();
+            throw new Error(`FastAPI responded with status: ${response.status}, message: ${errorText}`);
         }
 
         const aiResponse = await response.json();
@@ -42,6 +72,123 @@ aiRouter.post("/ask", async (req, res) => {
             res.status(500).json({ 
                 error: "Internal server error",
                 message: error.message 
+            });
+        }
+    }
+});
+
+
+aiRouter.post("/ask/image", upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                error: "Image file is required"
+            });
+        }
+
+        // Check if file is an image
+        if (!req.file.mimetype.startsWith('image/')) {
+            return res.status(400).json({
+                error: "File must be an image"
+            });
+        }
+
+        // Create FormData to send the file
+        const formData = new FormData();
+        formData.append('file', req.file.buffer, {
+            filename: req.file.originalname,
+            contentType: req.file.mimetype
+        });
+
+        const response = await fetch(`${FASTAPI_URL}/ask/image`, {
+            method: 'POST',
+            body: formData,
+            headers: formData.getHeaders()
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`FastAPI responded with status: ${response.status}, message: ${errorText}`);
+        }
+
+        const aiResponse = await response.json();
+        res.json({
+            success: true,
+            data: aiResponse
+        });
+
+    } catch (error) {
+        console.error('Error processing image request:', error);
+        if (error.code === 'ECONNREFUSED') {
+            res.status(503).json({
+                error: "AI service is currently unavailable",
+                message: "Could not connect to AI agent"
+            });
+        } else {
+            res.status(500).json({
+                error: "Internal server error",
+                message: error.message
+            });
+        }
+    }
+});
+
+
+aiRouter.post("/ask/voice", upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                error: "Audio file is required"
+            });
+        }
+
+        // Check if file is an audio file
+        const allowedAudioTypes = [
+            "audio/mpeg", "audio/mp4", "audio/m4a", "audio/wav", 
+            "audio/webm", "audio/ogg", "audio/flac"
+        ];
+        
+        if (!allowedAudioTypes.includes(req.file.mimetype)) {
+            return res.status(400).json({
+                error: "File must be an audio file (mp3, m4a, wav, webm, ogg, flac)"
+            });
+        }
+
+        // Create FormData to send the file
+        const formData = new FormData();
+        formData.append('file', req.file.buffer, {
+            filename: req.file.originalname,
+            contentType: req.file.mimetype
+        });
+
+        const response = await fetch(`${FASTAPI_URL}/ask/voice`, {
+            method: 'POST',
+            body: formData,
+            headers: formData.getHeaders()
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`FastAPI responded with status: ${response.status}, message: ${errorText}`);
+        }
+
+        const aiResponse = await response.json();
+        res.json({
+            success: true,
+            data: aiResponse
+        });
+
+    } catch (error) {
+        console.error('Error processing voice request:', error);
+        if (error.code === 'ECONNREFUSED') {
+            res.status(503).json({
+                error: "AI service is currently unavailable",
+                message: "Could not connect to AI agent"
+            });
+        } else {
+            res.status(500).json({
+                error: "Internal server error",
+                message: error.message
             });
         }
     }
