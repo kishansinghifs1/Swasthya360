@@ -11,82 +11,79 @@ import UserDetails from "./User-Details/UserDetails";
 import ChatbotParent from "./Health-Chatbot/ChatbotParent";
 import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
-
-// 🔹 Import the AuthModal wrapper
 import AuthModal from "./components/AuthModal";
 
 function App() {
-  const [showAuth, setShowAuth] = useState(false); // controls modal open
-  const [authView, setAuthView] = useState("signin"); // signin | signup
+  const [showAuth, setShowAuth] = useState(false);
+  const [authView, setAuthView] = useState("signin"); // default modal view
 
   return (
-    <Routes>
-      {/* Public Home page */}
-      <Route
-        path="/"
-        element={
-          <div>
-            <Header
-              onSignUpClick={() => {
-                setAuthView("signup");
-                setShowAuth(true);
-              }}
-              onSignInClick={() => {
-                setAuthView("signin");
-                setShowAuth(true);
-              }}
-            />
-            <HeroSection />
-            <FeaturesSection />
-            <ServiceSection />
-            <Footer />
-
-            {/* ✅ Auth Modal */}
-            {showAuth && (
-              <AuthModal
-                onClose={() => setShowAuth(false)}
-                initialView={authView}
-              />
-            )}
-          </div>
-        }
+    <>
+      <Header
+        onSignUpClick={() => {
+          setAuthView("signup");
+          setShowAuth(true);
+        }}
+        onSignInClick={() => {
+          setAuthView("signin");
+          setShowAuth(true);
+        }}
       />
 
-      {/* Full-page SignIn */}
-      <Route
-        path="/signin"
-        element={
-          <div className="relative min-h-screen flex flex-col">
-            <Header />
-            <AuthModal onClose={() => {}} initialView="signin" />
-            <Footer />
-          </div>
-        }
-      />
+      <Routes>
+        {/* Public Home page */}
+        <Route
+          path="/"
+          element={
+            <>
+              <HeroSection />
+              <FeaturesSection />
+              <ServiceSection />
+              <Footer />
+            </>
+          }
+        />
 
-      {/* Full-page SignUp */}
-      <Route
-        path="/signup"
-        element={
-          <div className="relative min-h-screen flex flex-col">
-            <Header />
-            <AuthModal onClose={() => {}} initialView="signup" />
-            <Footer />
-          </div>
-        }
-      />
+        {/* Full-page SignIn */}
+        <Route
+          path="/signin"
+          element={
+            <>
+              <AuthModal onClose={() => {}} initialView="signin" />
+              <Footer />
+            </>
+          }
+        />
 
-      {/* After login routes */}
-      <Route path="/landing" element={<Landingpage />} />
-      <Route path="/check-symptoms" element={<CheckSymptom />} />
-      <Route path="/user-details" element={<UserDetails />} />
-      <Route path="/health-chatbot" element={<ChatbotParent />} />
-      <Route path="/vaccination-info" element={<VaccinationPage />} />
-      <Route path="/disease-outbreaks" element={<OutBreakPage />} />
+        {/* Full-page SignUp */}
+        <Route
+          path="/signup"
+          element={
+            <>
+              <AuthModal onClose={() => {}} initialView="signup" />
+              <Footer />
+            </>
+          }
+        />
 
-      {/* Example profile page */}
-      <Route path="/profile" element={<h1 className="p-6">Profile Page 1</h1>} />
-    </Routes>
+        {/* After login routes */}
+        <Route path="/landing" element={<Landingpage />} />
+        <Route path="/check-symptoms" element={<CheckSymptom />} />
+        <Route path="/user-details" element={<UserDetails />} />
+        <Route path="/health-chatbot" element={<ChatbotParent />} />
+        <Route path="/vaccination-info" element={<VaccinationPage />} />
+        <Route path="/disease-outbreaks" element={<OutBreakPage />} />
+        <Route path="/profile" element={<h1 className="p-6">Profile Page</h1>} />
+      </Routes>
+
+      {/* Home page modal */}
+      {showAuth && (
+        <AuthModal
+          onClose={() => setShowAuth(false)}
+          initialView={authView}
+        />
+      )}
+    </>
   );
 }
 

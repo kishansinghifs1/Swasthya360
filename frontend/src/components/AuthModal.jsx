@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SignIn from "./signin";
 import SignUp from "./signup";
 
-const AuthModal = ({ onClose }) => {
-  const [view, setView] = useState("signin"); // signin | signup
+const AuthModal = ({ onClose, initialView = "signin" }) => {
+  const [view, setView] = useState(initialView); // signin | signup
+
+  // Update view if initialView changes (e.g., navigating between /signin and /signup)
+  useEffect(() => {
+    setView(initialView);
+  }, [initialView]);
 
   return (
     <>

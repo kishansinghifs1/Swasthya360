@@ -36,26 +36,59 @@ const SignUp = ({ onClose, onSwitch }) => {
               className="h-20 w-20 object-cover rounded-full border-4 border-cyan-400 shadow-md"
             />
             <h1 className="text-blue-950 text-2xl font-bold">Create Account</h1>
-            <p className="text-gray-600 text-sm">Fill the details to sign up</p>
+            <p className="text-gray-600 text-sm">Fill in your details to get started</p>
           </div>
 
           {/* Form */}
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
+            {/* Full Name */}
             <input
               type="text"
               placeholder="Full Name"
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
             />
+
+            {/* Username */}
+            <input
+              type="text"
+              placeholder="Username"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Email */}
             <input
               type="email"
-              placeholder="Email"
+              placeholder="Email Address"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Phone */}
+            <input
+              type="tel"
+              placeholder="Phone Number"
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
             />
+
+            {/* Password */}
             <input
               type="password"
               placeholder="Password"
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
             />
+
+            {/* Confirm Password */}
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Submit */}
             <button
               type="submit"
               className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all"
