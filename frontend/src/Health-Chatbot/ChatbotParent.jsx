@@ -19,45 +19,56 @@ const ChatbotParent = () => {
       }),
     },
   ]);
-
-  // ✅ handle sending messages (text / image)
-  const handleSend = (content, type = "text") => {
-    if (!content) return;
-
-    const newMessage = {
-      id: Date.now(),
-      sender: "user",
-      type,
-      text: type === "text" ? content : "",
-      image: type === "image" ? content : null,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-
-    // 🔥 Demo bot reply (replace with backend)
-    if (type === "text") {
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now() + 1,
-            sender: "bot",
-            type: "text",
-            text: "Thanks for your query. I’ll connect you with health info shortly...",
-            image: null,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          },
-        ]);
-      }, 1000);
+  const handleSend = (msg) => {
+    // normalize if parent gets a string
+    if (typeof msg === "string") {
+      setMessages((p) => [
+        ...p,
+        { id: Date.now(), sender: "user", type: "text", text: msg },
+      ]);
+    } else {
+      setMessages((p) => [...p, msg]);
     }
   };
+
+  // ✅ handle sending messages (text / image)
+  // const handleSend = (content, type = "text") => {
+  //   if (!content) return;
+
+  //   const newMessage = {
+  //     id: Date.now(),
+  //     sender: "user",
+  //     type,
+  //     text: type === "text" ? content : "",
+  //     image: type === "image" ? content : null,
+  //     time: new Date().toLocaleTimeString([], {
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     }),
+  //   };
+
+  //   setMessages((prev) => [...prev, newMessage]);
+
+  //   // 🔥 Demo bot reply (replace with backend)
+  //   if (type === "text") {
+  //     setTimeout(() => {
+  //       setMessages((prev) => [
+  //         ...prev,
+  //         {
+  //           id: Date.now() + 1,
+  //           sender: "bot",
+  //           type: "text",
+  //           text: "Thanks for your query. I’ll connect you with health info shortly...",
+  //           image: null,
+  //           time: new Date().toLocaleTimeString([], {
+  //             hour: "2-digit",
+  //             minute: "2-digit",
+  //           }),
+  //         },
+  //       ]);
+  //     }, 1000);
+  //   }
+  // };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-cyan-100 via-white to-cyan-200">
@@ -66,17 +77,42 @@ const ChatbotParent = () => {
         <ChatHeader />
 
         {/* ✅ Messages */}
-        <ChatMessages messages={messages} />
-        <div className="flex justify-center items-center">
+
+        {/* <div className="flex justify-center items-center">
           {" "}
           <Lottie
             animationData={emptyAnimation}
             loop={true}
             className="w-80 h-70"
           />
-        </div>
+        </div> */}
         {/* ✅ Input (with voice + image) */}
-        <ChatInput onSend={handleSend} />
+        <div className="flex flex-col h-[60vh]">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`max-w-[75%] p-2 rounded-lg ${
+                  m.sender === "user"
+                    ? "ml-auto bg-cyan-500 text-white"
+                    : "mr-auto bg-white text-gray-800 shadow"
+                }`}
+              >
+                {m.type === "text" && <div>{m.text}</div>}
+                {m.type === "image" && (
+                  <img
+                    src={m.image}
+                    alt="user-upload"
+                    className="max-w-full rounded"
+                  />
+                )}
+                {m.type === "audio" && <audio src={m.audio} controls />}
+              </div>
+            ))}
+          </div>
+
+          <ChatInput onSend={handleSend} />
+        </div>
 
         {/* ✅ Disclaimer */}
         <div className="text-xs text-gray-500 text-center p-2 border-t">

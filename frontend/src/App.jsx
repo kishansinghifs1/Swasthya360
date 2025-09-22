@@ -12,6 +12,7 @@ import ChatbotParent from "./Health-Chatbot/ChatbotParent";
 import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
 import VaccinationPage from "./Vaccination-info/VaccinationPage";
 import AuthModal from "./components/AuthModal";
+import WhatsappBot from "./components/WhatsappBot"
 
 function App() {
   const [showAuth, setShowAuth] = useState(false);
@@ -74,6 +75,7 @@ function App() {
         <Route path="/vaccination-info" element={<VaccinationPage />} />
         <Route path="/disease-outbreaks" element={<OutBreakPage />} />
         <Route path="/profile" element={<h1 className="p-6">Profile Page</h1>} />
+        <Route path="/whatsapp-chatbot" element={<WhatsappBot />} />
       </Routes>
 
       {/* Home page modal */}

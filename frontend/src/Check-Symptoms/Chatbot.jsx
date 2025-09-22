@@ -1,5 +1,6 @@
 import useSymptomStore from "../Store/SysmptomStore";
 import emptyAnimation from "../assets/Medical app.json";
+import emptyAnimation2 from "../assets/Search Doctor.json";
 import Lottie from "lottie-react";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -8,6 +9,7 @@ import { UserCircle, Stethoscope } from "lucide-react";
 const Chatbot = () => {
   const { queryMsg, APIMsg } = useSymptomStore();
   const [visibleChats, setVisibleChats] = useState(0);
+  const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
 
   function parseResponse(text) {
@@ -26,7 +28,7 @@ const Chatbot = () => {
     return sections;
   }
 
-  const structured = parseResponse(APIMsg);
+  const structured = APIMsg ? parseResponse(APIMsg) : {};
 
   const chatOrder = [
     { label: "ASSESSMENT", type: "text" },
@@ -38,19 +40,27 @@ const Chatbot = () => {
     { label: "DISCLAIMER", type: "text" },
   ];
 
-  // Show chats one by one with delay
+  // When user sends query, start loading
   useEffect(() => {
-    if (!APIMsg) return;
+    if (queryMsg && !APIMsg) {
+      setLoading(true);
+    }
+  }, [queryMsg]);
 
-    setVisibleChats(0); // reset
-    chatOrder.forEach((_, i) => {
-      setTimeout(() => {
-        setVisibleChats((prev) => prev + 1);
-      }, i * 1200);
-    });
+  // When API responds, stop loading and start showing chats
+  useEffect(() => {
+    if (APIMsg) {
+      setLoading(false);
+      setVisibleChats(0); // reset
+      chatOrder.forEach((_, i) => {
+        setTimeout(() => {
+          setVisibleChats((prev) => prev + 1);
+        }, i * 1200);
+      });
+    }
   }, [APIMsg]);
 
-  // Auto scroll to bottom when chats update
+  // Auto scroll
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -96,8 +106,20 @@ const Chatbot = () => {
           </div>
         )}
 
+        {/* Waiting for API → show animation */}
+        {loading && (
+          <div className="flex justify-center items-center mt-10">
+            <Lottie
+              animationData={emptyAnimation2}
+              loop={true}
+              className="w-60 h-60"
+            />
+          </div>
+        )}
+
         {/* Doctor Chats */}
-        {APIMsg &&
+        {!loading &&
+          APIMsg &&
           chatOrder.map((item, i) => {
             const content = structured[item.label];
             if (!content || i >= visibleChats) return null;
