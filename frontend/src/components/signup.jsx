@@ -1,52 +1,15 @@
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import useUserStore from "../store/userStore";
 
 const SignUp = ({ onClose, onSwitch }) => {
   const navigate = useNavigate();
-  const setUser = useUserStore((state) => state.setUser);
-  const setToken = useUserStore((state) => state.setToken);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    // TODO: send signup data to API
 
-    try {
-      const res = await fetch(
-        "https://swasthya360-7.onrender.com/api/v1/users/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || "Signup failed");
-
-      // Save in Zustand
-      setUser(data.user);
-      setToken(data.token);
-
-      // Save token in localStorage as Bearer
-      localStorage.setItem("token", `Bearer ${data.token}`);
-
-      onClose?.(); // close modal
-      navigate("/landing");
-    } catch (error) {
-      console.error("Signup error:", error);
-    }
+    onClose?.(); // close modal if used inside modal
+    navigate("/landing"); // ✅ redirect
   };
 
   return (
@@ -73,35 +36,59 @@ const SignUp = ({ onClose, onSwitch }) => {
               className="h-20 w-20 object-cover rounded-full border-4 border-cyan-400 shadow-md"
             />
             <h1 className="text-blue-950 text-2xl font-bold">Create Account</h1>
-            <p className="text-gray-600 text-sm">Fill the details to sign up</p>
+            <p className="text-gray-600 text-sm">Fill in your details to get started</p>
           </div>
 
           {/* Form */}
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
+            {/* Full Name */}
             <input
               type="text"
-              name="name"
               placeholder="Full Name"
-              value={formData.name}
-              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
             />
+
+            {/* Username */}
+            <input
+              type="text"
+              placeholder="Username"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Email */}
             <input
               type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
+              placeholder="Email Address"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Phone */}
+            <input
+              type="tel"
+              placeholder="Phone Number"
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
             />
+
+            {/* Password */}
             <input
               type="password"
-              name="password"
               placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
             />
+
+            {/* Confirm Password */}
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+              required
+            />
+
+            {/* Submit */}
             <button
               type="submit"
               className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all"
