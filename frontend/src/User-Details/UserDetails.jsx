@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PersonalDetails from "./PersonalDetails";
 import MedicalDetails from "./MedicalDetails";
 
 const UserDetails = () => {
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState({
     firstName: "",
     lastName: "",
@@ -22,6 +23,50 @@ const UserDetails = () => {
     allergies: "",
     currentMedications: [],
   });
+
+  // ✅ Fetch user details on mount (edit existing details)
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("https://swasthya360.onrender.com/api/users/update", {
+          method: "GET",
+          credentials: "include", // if auth cookie/session
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUserDetails(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch user details:", err);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // ✅ Save details to backend
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://swasthya360.onrender.com/api/users/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // send cookies if needed
+        body: JSON.stringify(userDetails),
+      });
+
+      if (res.ok) {
+        alert("User details saved successfully ✅");
+      } else {
+        const err = await res.json();
+        alert("Error: " + (err.message || "Failed to save details"));
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      alert("Something went wrong, please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleReset = () => {
     setUserDetails({
@@ -78,9 +123,11 @@ const UserDetails = () => {
           )}
           {step === 2 && (
             <button
-              className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition font-semibold"
+              onClick={handleSubmit}
+              disabled={loading}
+              className="px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition font-semibold disabled:opacity-50"
             >
-              Complete Setup
+              {loading ? "Saving..." : "Complete Setup"}
             </button>
           )}
           <button

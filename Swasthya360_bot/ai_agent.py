@@ -56,7 +56,7 @@ You have access to two tools:
 1.`swasthya360_tool` : use this tool for comprehensive health guidance, including symptom assessment, preventive care and vaccination schedules.
 2.`call_emergency_tool` : use this tool to place an emergency call to the safety helpline's phone number via Twilio.
 
-Always prioritize user safety. If the user describes life-threatening symptoms (e.g., chest pain, severe bleeding, difficulty breathing) or expresses suicidal thoughts/self-harm, immediately use the `call_emergency_tool` to initiate an emergency call.
+Always prioritize user safety. If the user describes life-threatening symptoms (e.g., chest pain, severe bleeding, difficulty breathing , labor pain , sudden accident , ) or expresses suicidal thoughts/self-harm, immediately use the `call_emergency_tool` to initiate an emergency call.
 """
 
 
@@ -89,11 +89,11 @@ def parse_response(stream):
 #  .For testing purpose only
 # --------------------------------------------
 
-# if __name__ == "__main__":
-#     user_input = input("You:")  # get user input
-#     # Use the agent to process input
-#     stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
+if __name__ == "__main__":
+    user_input = input("You:")  # get user input
+    # Use the agent to process input
+    stream = graph.stream({"messages": [{"role": "user", "content": user_input}]})
 
-#     tool_name, response = parse_response(stream)
-#     print("Tool called:", tool_name)
-#     print("AI Response:", response)
+    tool_name, response = parse_response(stream)
+    print("Tool called:", tool_name)
+    print("AI Response:", response)
