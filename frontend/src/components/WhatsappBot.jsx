@@ -9,7 +9,7 @@ import {
   FaClinicMedical,
   FaBiohazard,
 } from "react-icons/fa";
-import Header from "./header";
+import Header from "./Header";
 
 const WhatsappBot = () => {
   const [copied, setCopied] = useState(false);

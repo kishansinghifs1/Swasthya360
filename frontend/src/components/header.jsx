@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
-import EmergencyButton from "./EmergencyButton";
+import EmergencyButton from "./EmergencyButton.jsx";
 import useUserStore from "../Store/userStore.js";
 
 const Header = ({

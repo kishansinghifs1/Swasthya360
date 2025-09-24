@@ -1,22 +1,22 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/header";
-import Footer from "./components/Footer";
-import HeroSection from "./components/HeroSection";
-import ServiceSection from "./components/ServiceSection";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import HeroSection from "./components/HeroSection.jsx";
+import ServiceSection from "./components/ServiceSection.jsx";
 import FeaturesSection from "./components/FeatureSection";
-import Landingpage from "./components/Landingpage";
-import CheckSymptom from "./Check-Symptoms/CheckSymptom";
-import UserDetails from "./User-Details/UserDetails";
-import ChatbotParent from "./Health-Chatbot/ChatbotParent";
-import OutBreakPage from "./Disease-Outbreak/OutBreakPage";
-import VaccinationPage from "./Vaccination-info/VaccinationPage";
-import AuthModal from "./components/AuthModal";
-import WhatsappBot from "./components/WhatsappBot"
+import Landingpage from "./components/Landingpage.jsx";
+import CheckSymptom from "./Check-Symptoms/CheckSymptom.jsx";
+import UserDetails from "./User-Details/UserDetails.jsx";
+import ChatbotParent from "./Health-Chatbot/ChatbotParent.jsx";
+import OutBreakPage from "./Disease-Outbreak/OutBreakPage.jsx";
+import VaccinationPage from "./Vaccination-info/VaccinationPage.jsx";
+import AuthModal from "./components/AuthModal.jsx";
+import WhatsappBot from "./components/WhatsappBot.jsx"
 
 function App() {
   const [showAuth, setShowAuth] = useState(false);
-  const [authView, setAuthView] = useState("signin"); // default modal view
+  const [authView, setAuthView] = useState("signin"); 
 
   return (
     <>
@@ -32,7 +32,6 @@ function App() {
       />
 
       <Routes>
-        {/* Public Home page */}
         <Route
           path="/"
           element={

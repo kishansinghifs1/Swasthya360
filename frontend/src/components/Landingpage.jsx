@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Hero from "./hero";
-import Header from "./header";
-import Dashboard from "./dashboard";
-import Footer from "./Footer";
-import AboutSwasthya from "./AboutSwasthya";
+import Hero from "./Hero.jsx";
+import Header from "./Header.jsx";
+import Dashboard from "./Dashboard.jsx";
+import Footer from "./Footer.jsx";
+import AboutSwasthya from "./AboutSwasthya.jsx";
 
 const Landingpage = () => {
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);

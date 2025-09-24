@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import SignIn from "./signin";
-import SignUp from "./signup";
+import SignIn from "./Signin";
+import SignUp from "./Signup";
 
 const AuthModal = ({ onClose, initialView = "signin" }) => {
   const [view, setView] = useState(initialView); // signin | signup
