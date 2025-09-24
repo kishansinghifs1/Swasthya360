@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { X } from "lucide-react";
-
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useUserStore from "../store/userStore.js";
@@ -15,13 +13,11 @@ const SignIn = ({ onClose, onSwitch }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
 
     try {
       const res = await fetch(
@@ -55,7 +51,6 @@ const SignIn = ({ onClose, onSwitch }) => {
     }
   };
 
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
       <div className="relative group w-full max-w-2xl px-4">
@@ -68,7 +63,6 @@ const SignIn = ({ onClose, onSwitch }) => {
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
-
             disabled={isLoading}
           >
             <X size={22} />
@@ -85,22 +79,7 @@ const SignIn = ({ onClose, onSwitch }) => {
             <p className="text-gray-600 text-sm">Sign in to your account</p>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
-              {error}
-            </div>
-          )}
-
-          {/* Success Message */}
-          {success && (
-            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
-              {success}
-            </div>
-          )}
-
           {/* Form */}
-
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="email"
@@ -108,7 +87,7 @@ const SignIn = ({ onClose, onSwitch }) => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-             disabled={isLoading}
+              disabled={isLoading}
               className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <input
@@ -129,8 +108,11 @@ const SignIn = ({ onClose, onSwitch }) => {
                   : "bg-cyan-700 hover:bg-cyan-800 text-white"
               }`}
             >
+              {isLoading ? "Redirecting you to the landing page..." : "Sign In"}
             </button>
           </form>
+
+          {/* Forgot Password */}
           <p className={`text-sm text-gray-500 cursor-pointer hover:underline text-center ${
             isLoading ? "opacity-50 pointer-events-none" : ""
           }`}>
@@ -143,10 +125,10 @@ const SignIn = ({ onClose, onSwitch }) => {
           }`}>
             <p className="text-gray-600">Don't have an account?</p>
             <button
-
               onClick={onSwitch}
               disabled={isLoading}
               className="text-cyan-700 font-semibold hover:underline disabled:cursor-not-allowed"
+            >
               Sign Up
             </button>
           </div>
@@ -156,4 +138,4 @@ const SignIn = ({ onClose, onSwitch }) => {
   );
 };
 
-export default SignIn;
+export default SignIn; 

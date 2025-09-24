@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import useVaccineStore from "../Store/VaccineStore";
-import { BACKEND_URL } from "../config/config";
 import { X } from "lucide-react";
 import useUserStore from "../Store/userStore.js";
 
@@ -34,7 +33,6 @@ const AddVaccine = () => {
 
     try {
       // Get token from localStorage for authentication
-
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -61,7 +59,6 @@ const AddVaccine = () => {
         }
       );
 
-
       const data = await response.json();
 
       if (!response.ok) {
@@ -75,9 +72,7 @@ const AddVaccine = () => {
         type: priority,
         dateAdministered: new Date(date).toISOString(),
         userId: data.userId || "user", // Use userId from response
-
         id: data.id, // Add ID from backend response
-
       });
 
       // Clear form
@@ -90,7 +85,8 @@ const AddVaccine = () => {
 
       // Hide success message after 3 seconds
       setTimeout(() => {
-
+        setSuccess("");
+      }, 3000);
     } catch (error) {
       console.error("Error adding vaccine:", error);
       setError(error.message || "Failed to add vaccine. Please try again.");
