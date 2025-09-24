@@ -70,7 +70,7 @@ function App() {
         {/* After login routes */}
         <Route path="/landing" element={<Landingpage />} />
         <Route path="/check-symptoms" element={<CheckSymptom />} />
-        <Route path="/user-details" element={<UserDetails />} />
+        <Route path="/doctor-appointment" element={<UserDetails />} />
         <Route path="/health-chatbot" element={<ChatbotParent />} />
         <Route path="/vaccination-info" element={<VaccinationPage />} />
         <Route path="/disease-outbreaks" element={<OutBreakPage />} />

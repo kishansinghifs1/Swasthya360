@@ -42,8 +42,8 @@ const agents = [
     color: "bg-emerald-50 text-emerald-600",
   },
   {
-    name: "User Details",
-    route: "/user-details",
+    name: "See your Booking",
+    route: "/doctor-appointment",
     icon: <UserCircle className="w-8 h-8" />,
     color: "bg-blue-50 text-blue-600",
   },

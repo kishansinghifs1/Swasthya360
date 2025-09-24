@@ -12,7 +12,7 @@ const SeveritySlider = () => {
       <input
         type="range"
         min="1"
-        max="5"
+        max="10"
         value={severity}
         onChange={(e) => setSeverity(e.target.value)}
         className="w-full h-2 bg-gradient-to-r from-green-400 via-yellow-400 to-red-500 rounded-lg appearance-none cursor-pointer"

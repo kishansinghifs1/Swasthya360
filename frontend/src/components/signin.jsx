@@ -1,7 +1,7 @@
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import useUserStore from "../store/userStore.js"; // import your Zustand store
+import useUserStore from "../store/userStore.js";
 
 const SignIn = ({ onClose, onSwitch }) => {
   const navigate = useNavigate();
@@ -9,6 +9,7 @@ const SignIn = ({ onClose, onSwitch }) => {
   const setToken = useUserStore((state) => state.setToken);
 
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,6 +17,7 @@ const SignIn = ({ onClose, onSwitch }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const res = await fetch(
@@ -37,10 +39,15 @@ const SignIn = ({ onClose, onSwitch }) => {
       // Save token in localStorage as Bearer
       localStorage.setItem("token", `Bearer ${data.token}`);
 
-      onClose?.();
-      navigate("/landing");
+      // Keep loading state for a moment to show the redirect message
+      setTimeout(() => {
+        onClose?.();
+        navigate("/landing");
+      }, 1000);
+
     } catch (error) {
       console.error("Login error:", error);
+      setIsLoading(false); // Reset loading state on error
     }
   };
 
@@ -56,6 +63,7 @@ const SignIn = ({ onClose, onSwitch }) => {
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
+            disabled={isLoading}
           >
             <X size={22} />
           </button>
@@ -79,7 +87,8 @@ const SignIn = ({ onClose, onSwitch }) => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <input
               type="password"
@@ -87,27 +96,38 @@ const SignIn = ({ onClose, onSwitch }) => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400"
+              disabled={isLoading}
+              className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             <button
               type="submit"
-              className="w-full bg-cyan-700 hover:bg-cyan-800 text-white py-3 rounded-lg font-semibold transition-all"
+              disabled={isLoading}
+              className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                isLoading
+                  ? "bg-cyan-400 text-cyan-100 cursor-not-allowed opacity-70"
+                  : "bg-cyan-700 hover:bg-cyan-800 text-white"
+              }`}
             >
-              Sign In
+              {isLoading ? "Redirecting you to the landing page..." : "Sign In"}
             </button>
           </form>
 
           {/* Forgot Password */}
-          <p className="text-sm text-gray-500 cursor-pointer hover:underline text-center">
+          <p className={`text-sm text-gray-500 cursor-pointer hover:underline text-center ${
+            isLoading ? "opacity-50 pointer-events-none" : ""
+          }`}>
             Forgot Password?
           </p>
 
           {/* Switch to Sign Up */}
-          <div className="flex justify-center items-center gap-2 text-sm">
-            <p className="text-gray-600">Don’t have an account?</p>
+          <div className={`flex justify-center items-center gap-2 text-sm ${
+            isLoading ? "opacity-50 pointer-events-none" : ""
+          }`}>
+            <p className="text-gray-600">Don't have an account?</p>
             <button
               onClick={onSwitch}
-              className="text-cyan-700 font-semibold hover:underline"
+              disabled={isLoading}
+              className="text-cyan-700 font-semibold hover:underline disabled:cursor-not-allowed"
             >
               Sign Up
             </button>
