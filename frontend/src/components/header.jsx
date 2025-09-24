@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
 import EmergencyButton from "./EmergencyButton";
+import useUserStore from "../Store/userStore.js";
 
 const Header = ({
   onMenuClick,
@@ -10,6 +11,7 @@ const Header = ({
   onSignOutClick,
 }) => {
   const location = useLocation();
+  const userStore = useUserStore.getState ? useUserStore : null;
 
   let hideEmergency = false;
   let hideNavMenu = false;
@@ -36,6 +38,50 @@ const Header = ({
     forceSignOut = true;
   }
 
+  const handleSignOut = () => {
+    // Clear all cookies
+    document.cookie.split(";").forEach((c) => {
+      const eqPos = c.indexOf("=");
+      const name = eqPos > -1 ? c.substr(0, eqPos).trim() : c.trim();
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${window.location.hostname}`;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    });
+
+    // Clear localStorage and sessionStorage
+    localStorage.clear();
+    sessionStorage.clear();
+
+    // Clear Zustand store if provided
+    if (userStore && typeof userStore.getState === "function") {
+      const state = userStore.getState();
+      if (typeof state.reset === "function") {
+        state.reset();
+      } else if (typeof state.clear === "function") {
+        state.clear();
+      } else {
+        // Fallback: reset common auth fields
+        userStore.setState(
+          {
+            user: null,
+            token: null,
+            isAuthenticated: false,
+            profile: null,
+          },
+          true
+        );
+      }
+    }
+
+    // Call the original sign out handler if it exists
+    if (onSignOutClick && typeof onSignOutClick === "function") {
+      onSignOutClick();
+    }
+
+    // Redirect to home after sign out
+    window.location.href = "/";
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-lg border-b border-gray-200">
       <div className="relative flex items-center h-20 px-4 md:px-12">
@@ -54,7 +100,7 @@ const Header = ({
           <img
             src="/Swasthya360.png"
             alt="Swasthya360 Logo"
-            className="h-16 w-16 object-cover rounded-full border-2 border-cyan-400 shadow-md"
+            className="h-16 w-16 object-cover rounded-full shadow-md"
           />
           <h1 className="text-2xl md:text-3xl font-bold font-serif bg-gradient-to-r from-[#008080] via-[#00CED1] to-[#228B22] bg-clip-text text-transparent">
             Swasthya360
@@ -88,7 +134,7 @@ const Header = ({
 
           {forceSignOut || isAuthenticated ? (
             <button
-              onClick={() => onSignOutClick?.()}
+              onClick={handleSignOut}
               className="px-5 py-2 md:px-6 md:py-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold rounded-lg shadow-md transition-all"
             >
               Sign Out
