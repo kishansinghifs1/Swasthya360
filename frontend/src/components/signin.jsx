@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { X } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useUserStore from "../store/userStore.js"; // import your Zustand store
@@ -12,10 +14,12 @@ const SignIn = ({ onClose, onSwitch }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
 
     try {
       const res = await fetch(
@@ -44,6 +48,7 @@ const SignIn = ({ onClose, onSwitch }) => {
     }
   };
 
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40">
       <div className="relative group w-full max-w-2xl px-4">
@@ -56,6 +61,7 @@ const SignIn = ({ onClose, onSwitch }) => {
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
+            disabled={loading}
           >
             <X size={22} />
           </button>
@@ -71,7 +77,22 @@ const SignIn = ({ onClose, onSwitch }) => {
             <p className="text-gray-600 text-sm">Sign in to your account</p>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
+
           {/* Form */}
+
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="email"
@@ -80,6 +101,7 @@ const SignIn = ({ onClose, onSwitch }) => {
               value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400"
+
             />
             <input
               type="password"
@@ -87,26 +109,41 @@ const SignIn = ({ onClose, onSwitch }) => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+
               className="w-full px-4 py-3 rounded-lg border border-blue-700 outline-none focus:ring-2 focus:ring-blue-500 bg-transparent text-gray-700 placeholder-gray-400"
+
             />
             <button
               type="submit"
-              className="w-full bg-cyan-700 hover:bg-cyan-800 text-white py-3 rounded-lg font-semibold transition-all"
+              disabled={loading}
+              className="w-full bg-cyan-700 hover:bg-cyan-800 text-white py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Sign In
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
 
           {/* Forgot Password */}
-          <p className="text-sm text-gray-500 cursor-pointer hover:underline text-center">
+          <p 
+            onClick={handleForgotPassword}
+            className="text-sm text-gray-500 cursor-pointer hover:underline text-center"
+          >
             Forgot Password?
           </p>
 
           {/* Switch to Sign Up */}
           <div className="flex justify-center items-center gap-2 text-sm">
-            <p className="text-gray-600">Don’t have an account?</p>
+            <p className="text-gray-600">Don't have an account?</p>
             <button
+
               onClick={onSwitch}
+
               className="text-cyan-700 font-semibold hover:underline"
             >
               Sign Up
