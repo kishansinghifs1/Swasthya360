@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useUserStore from "../store/userStore.js";
@@ -16,10 +18,12 @@ const SignUp = ({ onClose, onSwitch }) => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
 
     try {
       const res = await fetch(
@@ -46,6 +50,7 @@ const SignUp = ({ onClose, onSwitch }) => {
       navigate("/landing");
     } catch (error) {
       console.error("Signup error:", error);
+
     }
   };
 
@@ -61,6 +66,7 @@ const SignUp = ({ onClose, onSwitch }) => {
           <button
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition"
+            disabled={loading}
           >
             <X size={22} />
           </button>
@@ -76,7 +82,22 @@ const SignUp = ({ onClose, onSwitch }) => {
             <p className="text-gray-600 text-sm">Fill the details to sign up</p>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
+
           {/* Form */}
+
           <form className="flex flex-col gap-4 w-full" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -85,6 +106,7 @@ const SignUp = ({ onClose, onSwitch }) => {
               value={formData.name}
               onChange={handleChange}
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+
             />
             <input
               type="email"
@@ -92,7 +114,9 @@ const SignUp = ({ onClose, onSwitch }) => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
+
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+
             />
             <input
               type="password"
@@ -100,13 +124,23 @@ const SignUp = ({ onClose, onSwitch }) => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
+
               className="w-full px-4 py-3 rounded-lg border border-cyan-700 outline-none focus:ring-2 focus:ring-cyan-500 bg-transparent text-gray-700 placeholder-gray-400"
+
             />
             <button
               type="submit"
-              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all"
+              disabled={loading}
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Sign Up
+              {loading ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Creating Account...
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </form>
 
