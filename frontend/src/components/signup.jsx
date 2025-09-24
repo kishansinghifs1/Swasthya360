@@ -7,6 +7,7 @@ const SignUp = ({ onClose, onSwitch }) => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
   const setToken = useUserStore((state) => state.setToken);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,6 +21,7 @@ const SignUp = ({ onClose, onSwitch }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const res = await fetch(
@@ -104,9 +106,14 @@ const SignUp = ({ onClose, onSwitch }) => {
             />
             <button
               type="submit"
-              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white py-3 rounded-lg font-semibold transition-all"
+              disabled={isLoading}
+              className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                isLoading
+                  ? "bg-cyan-400 text-cyan-100 cursor-not-allowed opacity-70"
+                  : "bg-cyan-700 hover:bg-cyan-800 text-white"
+              }`}
             >
-              Sign Up
+               {isLoading ? "Redirecting you to the landing page..." : "Sign Up"}
             </button>
           </form>
 
